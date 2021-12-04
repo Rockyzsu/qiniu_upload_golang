@@ -133,7 +133,6 @@ dmypy.json
 data.cfg
 /.idea
 *.xml
-*.html
 /private
 .ipynb_checkpoints/
 *.log
