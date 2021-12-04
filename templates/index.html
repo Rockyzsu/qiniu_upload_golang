@@ -1,28 +1,228 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='zh-cn'>
 <head>
-    <meta charset="UTF-8">
+    <meta charset='UTF-8'>
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
-    <title>七牛文件上传</title>
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>七牛图床 - 文件上传</title>
 
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <link rel='stylesheet' href='https://cdn.bootcss.com/normalize/5.0.0/normalize.min.css'>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'lucida grande', 'lucida sans unicode', lucida, helvetica, 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+            align-items: center;
+            display: flex;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #container {
+            max-width: 400px;
+            flex-basis: 100%;
+            margin: 0 auto;
+            background: #FFF;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        #container #hero-img {
+            width: 100%;
+            height: 200px;
+            background: #007bff;
+        }
+
+        #container #profile-img {
+            /*width: 160px;*/
+            width: 80%;
+            /*height: 160px;*/
+            margin: -80px auto 0 auto;
+        }
+
+        #container #profile-img img {
+            width: 100%;
+            /*width: 300px;*/
+            margin: 0 auto;
+            background: #FFF;
+            border-radius: 10%;
+        }
+
+        #container #content {
+            text-align: center;
+            width: 320px;
+            margin: 0 auto;
+            padding: 0 0 20px 0;
+        }
+
+        #container #content h1 {
+            font-size: 29px;
+            font-weight: 500;
+            margin: 30px 0 0 0;
+        }
+
+        #container #content p {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #666;
+            margin: 15px 0 40px 0;
+        }
+
+        #container #content a {
+            color: #CCC;
+            font-size: 14px;
+            margin: 0 10px;
+            transition: color .3s ease-in-out;
+            -webkit-transition: color .3s ease-in-out;
+            line-height: 40px;
+        }
+
+        #container #content a:hover {
+            color: #007bff;
+        }
+
+        .btn {
+            background: none repeat scroll 0 0 #1BA1E2;
+            border: 0 none;
+            border-radius: 2px;
+            color: #FFFFFF !important;
+            cursor: pointer;
+            font-family: "Open Sans", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, Verdana, Tahoma, sans-serif;
+            font-size: 14px;
+            padding: 6px 10%;
+        }
+
+        .btn:hover, .yanshibtn:hover {
+            background: none repeat scroll 0 0 #9B59B6;
+            border: 0 none;
+            border-radius: 2px;
+            color: #FFFFFF !important;
+            cursor: pointer;
+            font-family: "Open Sans", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, Verdana, Tahoma, sans-serif;
+            font-size: 14px;
+            padding: 8px 10%;
+        }
+
+        .imgType {
+            display: none;
+        }
+
+        #images img {
+            width: 100%
+        }
+
+        #imgurl input {
+            width: 100%
+        }
+
+        #imgurl, #progress {
+            display: none;
+        }
+
+        .wrapper {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #666;
+            margin: 15px 20px 20px 0;
+        }
+
+        .img {
+            border-radius: 250px;
+        }
+
+        .url_input {
+            width: auto;
+            border: none;
+        }
+
+    </style>
 </head>
 <body>
+<div id='container'>
+    <div id='hero-img'>
+    </div>
+    <div id='profile-img'>
+        <img alt="公众号" src='http://xximg.30daydo.com/picgo/30天尝试新事情.jpg' id="imgLoading"
+             class="Rotation img" title="显示与隐藏"/>
+    </div>
+    <div id='content'>
+        <h2>七牛图床上传</h2>
+        <h5>
+            简约 七牛图片上传
+        </h5>
+        <div id="progress">
+            <progress max="100" value="0" id="pg"></progress>
+        </div>
+        <p class="imgType" id="imgType"></p>
+        <br>
+        <br>
+        <form id="uploadForm">
+            <input type="file" id="bt_file" name="file"><br>
+        </form>
 
 
-<form id="uploadForm">
-    <span>选择文件：</span><input type="file" id="bt_file" name="file"><br>
-</form>
-<button id="bt_upload">上传</button>
+        <div class="wrapper">
+            <button id="bt_upload">上传</button>
+            <p>生成的链接</p>
+            <!--            <label for="txt_content"></label>-->
+            <input id="txt_content" type="text" value="" class="url_input">
 
-<br>
+        </div>
+    </div>
 
-<div class="wrapper"><p>提交的内容:</p>
-    <labael for="txt_content"></labael>
-    <input id="txt_content" type="text" value="">
 
 </div>
+
+</body>
+
+
+<script type="text/javascript">
+    /**
+     * @act      sina
+     * @version  1.2
+     * @author  2kqq
+     */
+
+    function oCopy(obj) {
+        obj.select();
+        document.execCommand("Copy");
+        if (browserRedirect()) {
+            alert('设备类型为手机，有一定几率复制失败！请查看剪切板是否成功复制');
+        }
+    }
+
+    function browserRedirect() {
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) === 'ipad';
+        var bIsIphone = sUserAgent.match(/iphone os/i) === 'iphone os';
+        var bIsMidp = sUserAgent.match(/midp/i) === 'midp';
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) === 'rv:1.2.3.4';
+        var bIsUc = sUserAgent.match(/ucweb/i) === 'web';
+        var bIsCE = sUserAgent.match(/windows ce/i) === 'windows ce';
+        var bIsWM = sUserAgent.match(/windows mobile/i) === 'windows mobile';
+        var bIsAndroid = sUserAgent.match(/android/i) === 'android';
+        if (bIsIpad || bIsIphone || bIsMidp || bIsUc7 || bIsUc || bIsCE || bIsWM || bIsAndroid) {
+            return 1;
+        }
+    }
+
+    $(document).ready(function () {
+        $('#imgLoading').click(function () {
+            $("#imgContent").toggle();
+        });
+    });
+</script>
 
 <script type="text/javascript">
     function jsCopy() {
@@ -33,8 +233,11 @@
         input_str.select()
         // e.select(); //选择对象
         document.execCommand("Copy"); //执行浏览器复制命令
-        alert("已复制好，可贴粘。");
-
+        if (browserRedirect()) {
+            alert('设备类型为手机，有一定几率复制失败！请查看剪切板是否成功复制');
+        }else {
+            alert("已复制好，可贴粘。");
+        }
     }
 </script>
 
@@ -46,8 +249,12 @@
         console.log("click");
         var formData = new FormData($("#uploadForm")[0]);
 
-        // var team = document.getElementById("team").value;
-        // var salary = document.getElementById("salary").value;
+        if (Object.keys(formData).length === 0) {
+            alert("请选择文件");
+            return
+        }
+
+        console.log(formData)
         $.ajax({
             url: "/",
             type: "POST",
@@ -76,5 +283,5 @@
 
     }
 </script>
-</body>
+
 </html>
