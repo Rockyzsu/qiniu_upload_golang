@@ -31,35 +31,62 @@ func main() {
 		//获取普通文本
 		// 获取文件(注意这个地方的file要和html模板中的name一致)
 		file, err := ctx.FormFile("file")
+		//fmt.Printf("%v\n",file)
+		if file == nil {
+			fmt.Println("文件没有选中")
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":    1,
+				"message": "请选择文件",
+				"url":     "",
+			})
+			return
+		}
 		if err != nil {
 			fmt.Println("获取数据失败")
 			ctx.JSON(http.StatusOK, gin.H{
 				"code":    1,
 				"message": "获取数据失败",
-				"url":"",
+				"url":     "",
 			})
+			return
 		} else {
 			//保存上传文件
 			filePath := filepath.Join("./upload", file.Filename)
 			err = ctx.SaveUploadedFile(file, filePath)
 			if err != nil {
 				fmt.Println("保存失败")
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":    2,
+					"message": "保存失败",
+					"data":    "",
+				})
+				return
 			}
-			var source = "webupload"
-			urlpath, err := service.UploadImg(filePath, source)
+			if service.CheckExist(file.Filename) {
+				// 文件已经存在
+				//fmt.Println("文件已经存在")
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":    2,
+					"message": "文件名已经存在，为避免覆盖，修改文件名",
+					"data":    "",
+				})
+				return
+
+			}
+			urlpath, err := service.UploadImg(filePath, service.SOURCE)
 			if err != nil {
 				log.Fatal("Error")
 			}
-
+			//fmt.Println("上传成功")
 			ctx.JSON(http.StatusOK, gin.H{
 				"code":    0,
-				"message": "success",
+				"message": "上传成功",
 				"data":    urlpath,
 			})
+			return
 		}
 
 	})
-
 
 	router.Run(":80")
 }

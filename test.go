@@ -14,14 +14,24 @@ import (
 	"qiniu/service"
 )
 
-func main() {
-	var location="C:\\git\\qiniu_web_gin\\upload\\20211108130019.png"
-	var source="webupload"
-	url,err:=service.UploadImg(location,source)
-	if err!=nil{
+func upload_test() {
+	var location = "C:\\git\\qiniu_web_gin\\upload\\20211108130019.png"
+	var source = "webupload"
+	url, err := service.UploadImg(location, source)
+	if err != nil {
 		log.Fatal("Error")
-	}else{
+	} else {
 		fmt.Println(url)
 	}
 
+}
+
+func check_exist() {
+	filename := "20211204160053.png"
+	q_file := service.QiniuFileInfo{}
+	fmt.Println(q_file.Exist(filename))
+}
+
+func main() {
+	check_exist()
 }

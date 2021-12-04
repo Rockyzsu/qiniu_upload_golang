@@ -55,25 +55,42 @@ func NewFileInfo(path string) *FileInfo {
 	fileInfo.SetFilename()
 	return fileInfo
 }
-func NewAuth() (*storage.FormUploader, *UserInfo, storage.PutRet, string, storage.PutExtra) {
-	// 七牛sdk提供
 
-	user := NewUserInfo()
-	putPolicy := storage.PutPolicy{
-		Scope: user.bucket,
+type Authorition struct {
+	user      *UserInfo
+	putPolicy storage.PutPolicy
+	mac       *qbox.Mac
+	cfg       storage.Config
+}
+
+func (this *Authorition) init() {
+	this.user = NewUserInfo()
+	this.putPolicy = storage.PutPolicy{
+		Scope: this.user.bucket,
 	}
 
-	mac := qbox.NewMac(user.accessKey, user.secretKey)
-	upToken := putPolicy.UploadToken(mac)
-	cfg := storage.Config{}
+	this.mac = qbox.NewMac(this.user.accessKey, this.user.secretKey)
+
+	this.cfg = storage.Config{}
 	// 空间对应的机房
-	cfg.Zone = &storage.ZoneHuanan
+	this.cfg.Zone = &storage.ZoneHuanan
 	// 是否使用https域名
-	cfg.UseHTTPS = false
+	this.cfg.UseHTTPS = false
 	// 上传是否使用CDN上传加速
-	cfg.UseCdnDomains = false
+	this.cfg.UseCdnDomains = false
+
+}
+
+type Uploader struct {
+	Authorition
+}
+
+func (this *Uploader) NewUpload() (*storage.FormUploader, *UserInfo, storage.PutRet, string, storage.PutExtra) {
+	// 七牛sdk提供
+	this.init()
 	// 构建表单上传的对象
-	formUploader := storage.NewFormUploader(&cfg)
+	upToken := this.putPolicy.UploadToken(this.mac)
+	formUploader := storage.NewFormUploader(&this.cfg)
 	ret := storage.PutRet{}
 	// 可选配置
 	putExtra := storage.PutExtra{
@@ -81,11 +98,12 @@ func NewAuth() (*storage.FormUploader, *UserInfo, storage.PutRet, string, storag
 			"x:name": "CentOS Upload",
 		},
 	}
-	return formUploader, user, ret, upToken, putExtra
+	return formUploader, this.user, ret, upToken, putExtra
 }
 
 func UploadImg(path, source string) (string, error) {
-	formUploader, user, ret, upToken, putExtra := NewAuth()
+	uploader := Uploader{}
+	formUploader, user, ret, upToken, putExtra := uploader.NewUpload()
 
 	fileInfo := NewFileInfo(path)
 
@@ -107,4 +125,30 @@ func UploadImg(path, source string) (string, error) {
 	}
 
 	return user.space + ret.Key, nil
+}
+
+type QiniuFileInfo struct {
+	Authorition
+}
+
+func (this *QiniuFileInfo) Exist(filename string) bool {
+	this.init()
+	bucketManager := storage.NewBucketManager(this.mac, &this.cfg)
+	_, sErr := bucketManager.Stat(this.user.bucket, SOURCE+"/"+filename)
+	if sErr != nil {
+		//fmt.Println(sErr)
+		return false
+	} else {
+		//fmt.Println(fileInfo)
+		//fmt.Println(fileInfo.String())
+		//可以解析文件的PutTime
+		//fmt.Println(storage.ParsePutTime(fileInfo.PutTime))
+		return true
+	}
+
+}
+
+func CheckExist(filename string) bool {
+	q_file := QiniuFileInfo{}
+	return q_file.Exist(filename)
 }

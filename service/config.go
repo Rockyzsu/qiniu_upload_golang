@@ -16,13 +16,13 @@ type UserInfo struct {
 	bucket    string
 	space     string
 }
-
+const SOURCE = "webupload"
 func NewUserInfo() *UserInfo {
 
 	return &UserInfo{
 		accessKey: os.Getenv("qiniu_access_key"),
 		secretKey: os.Getenv("qiniu_secret_key"),
-		bucket:    "golandspace",
-		space:     "http://xximg.30daydo.com/",
+		bucket:   os.Getenv("qiniu_bucket"),
+		space:    os.Getenv("qiniu_space"),
 	}
 }

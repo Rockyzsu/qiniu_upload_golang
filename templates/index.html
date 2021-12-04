@@ -226,16 +226,13 @@
 
 <script type="text/javascript">
     function jsCopy() {
-        console.log('正在复制')
-        //var context = document.getElementById("content").innerText;//对象是hdhcms2
+        // 使用按钮复制
         var input_str = document.getElementById("txt_content");
-        // input_str.value = context;
         input_str.select()
-        // e.select(); //选择对象
         document.execCommand("Copy"); //执行浏览器复制命令
         if (browserRedirect()) {
             alert('设备类型为手机，有一定几率复制失败！请查看剪切板是否成功复制');
-        }else {
+        } else {
             alert("已复制好，可贴粘。");
         }
     }
@@ -243,18 +240,11 @@
 
 <script type="text/javascript">
     var submitBTN = document.getElementById("bt_upload");
-    // console.log(user_add_bt);
     submitBTN.onclick = function (event) {
         // 注意这里是 onclick 函数
         console.log("click");
         var formData = new FormData($("#uploadForm")[0]);
 
-        if (Object.keys(formData).length === 0) {
-            alert("请选择文件");
-            return
-        }
-
-        console.log(formData)
         $.ajax({
             url: "/",
             type: "POST",
@@ -263,21 +253,30 @@
             processData: false,
             contentType: false,
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 var url = data.data;
-                var input_str = document.getElementById("txt_content");
-                $("#txt_content").val(url);
 
-                input_str.value = url;
-                input_str.select()
-                // e.select(); //选择对象
-                document.execCommand("Copy"); //执行浏览器复制命令
-                alert("已复制好，可贴粘。");
-                // console.log(data.url);
+                if (data.code != 0) {
+                    console.log("不等于")
+                    alert(data.message)
+
+                } else {
+
+                    var input_str = document.getElementById("txt_content");
+                    $("#txt_content").val(url);
+                    input_str.value = url;
+                    input_str.select()
+                    document.execCommand("Copy"); //执行浏览器复制命令
+                    if (browserRedirect()) {
+                        alert('设备类型为手机，有一定几率复制失败！请查看剪切板是否成功复制');
+                    } else {
+                        alert("已复制好，可贴粘。");
+                    }
+                }
             },
             fail: function (data) {
                 alert("上传失败");
-                console.log(data)
+                console.log("上传失败");
             }
         })
 
