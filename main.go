@@ -25,7 +25,7 @@ func main() {
 	router.Static("./static", "static")
 	// 渲染模板
 	router.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "index_old.html", nil)
+		ctx.HTML(http.StatusOK, "index.html", nil)
 	})
 	router.POST("/", func(ctx *gin.Context) {
 		//获取普通文本
