@@ -44,8 +44,12 @@ go run main.go
 
 默认使用80端口访问。打开浏览器，输入网址：localhost即可。
 
-
-
+* build编译
+```bigquery
+go build -o "qiniu"
+运行：
+./qiniu
+```
 欢迎关注交流。
 
 
