@@ -23,6 +23,8 @@ Linux
 ```
 export qiniu_access_key='xxxxxxxxxxx'
 export qiniu_secret_key='xxxxxxxxxxx'
+export qiniu_bucket='bucket名字'
+export qiniu_space='你的域名空间'
 ```
 
 Windows:
@@ -30,7 +32,10 @@ Windows:
 百度如何添加环境变量即可
 
 ----
-
+* 修改机房设置：
+```bigquery
+this.cfg.Zone = &storage.ZoneHuanan // 默认用的华南地区，其他地区的需要在这里改
+```
 ### 运行
 
 ```go

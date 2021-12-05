@@ -73,7 +73,7 @@ func (this *Authorition) init() {
 
 	this.cfg = storage.Config{}
 	// 空间对应的机房
-	this.cfg.Zone = &storage.ZoneHuanan
+	this.cfg.Zone = &storage.ZoneHuanan // 默认用的华南地区，其他地区的需要在这里改
 	// 是否使用https域名
 	this.cfg.UseHTTPS = false
 	// 上传是否使用CDN上传加速
