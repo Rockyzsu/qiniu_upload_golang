@@ -12,6 +12,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -78,14 +79,28 @@ func main() {
 				log.Fatal("Error")
 			}
 			//fmt.Println("上传成功")
-			ctx.JSON(http.StatusOK, gin.H{
-				"code":    0,
-				"message": "上传成功",
-				"data":    urlpath,
-			})
+			status := service.UpdateRecord(urlpath)
+			if status {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":    0,
+					"message": "上传成功",
+					"data":    urlpath,
+				})
+			} else {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":    1,
+					"message": "上传成功，写入记录出错",
+					"data":    urlpath,
+				})
+			}
 			return
 		}
 
+	})
+
+	router.GET("/list", func(ctx *gin.Context) {
+		hist := service.GetRecord()
+		ctx.HTML(http.StatusOK, "ilist.html", gin.H{"history": hist})
 	})
 
 	router.Run(":80")
