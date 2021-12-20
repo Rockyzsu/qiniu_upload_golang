@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>上传记录</title>
+    <style type="text/css">
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        table td, table th {
+            border: 1px solid #cad9ea;
+            color: #666;
+            height: 60px;
+        }
+
+        table thead th {
+            background-color: #CCE8EB;
+            width: 400px;
+        }
+
+        table tr:nth-child(odd) {
+            background: #fff;
+        }
+
+        table tr:nth-child(even) {
+            background: #F5FAFA;
+        }
+    </style>
+
+</head>
+<body>
+
+
+<div>
+    <p>最多显示上传历史记录 50条</p>
+
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>URL</th>
+            <th>Updated</th>
+        </tr>
+
+        {{ range $v := .history}}
+        <tr>
+            <td>{{ $v.Id }}</td>
+            <td>{{ $v.Url }}</td>
+            <td>{{ $v.Updated }}</td>
+        </tr>
+        {{ end }}
+
+
+    </table>
+
+</div>
+</body>

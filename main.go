@@ -103,5 +103,9 @@ func main() {
 		ctx.HTML(http.StatusOK, "ilist.html", gin.H{"history": hist})
 	})
 
+	router.GET("/copy", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "paste.html", nil)
+	})
+
 	router.Run(":80")
 }
