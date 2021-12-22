@@ -135,7 +135,6 @@ data.cfg
 *.xml
 /private
 .ipynb_checkpoints/
-*.log
 *.pkl
 stock_list.txt
 bases.csv
@@ -152,12 +151,10 @@ settings.py
 keys/
 data/
 config.json
-.ipynb_checkpoints
 log/
 configure/
 release/
 *.exe
 *.png
 *.jpg
-
-
+*.sh

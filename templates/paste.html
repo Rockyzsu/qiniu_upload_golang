@@ -4,7 +4,7 @@
     <meta charset='UTF-8'>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <title>七牛图床 - 文件上传</title>
+    <title>七牛图床 - 文字粘贴</title>
 
     <link rel='stylesheet' href='https://cdn.bootcss.com/normalize/5.0.0/normalize.min.css'>
     <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
@@ -61,7 +61,7 @@
             text-align: center;
             width: 320px;
             margin: 0 auto;
-            padding: 0 0 20px 0;
+            padding: 0 0 70px 0;
         }
 
         #container #content h1 {
@@ -82,6 +82,7 @@
             color: #CCC;
             font-size: 14px;
             margin: 0 10px;
+            /*margin: auto;*/
             transition: color .3s ease-in-out;
             -webkit-transition: color .3s ease-in-out;
             line-height: 40px;
@@ -156,25 +157,20 @@
         <img alt="公众号" src='http://xximg.30daydo.com/picgo/30天尝试新事情.jpg' id="imgLoading"
              class="Rotation img" title="显示与隐藏"/>
     </div>
+
     <div id='content'>
-        <h2>文本复制粘贴</h2>
+        <textarea rows="10" cols="30" id="mytext"></textarea>
+        <h2 id="tips">文本复制粘贴</h2>
 
 
         <p class="imgType" id="imgType"></p>
         <br>
-        <br>
-        <form id="uploadForm">
-            <input type="file" id="bt_file" name="file"><br>
-        </form>
-
 
         <div class="wrapper">
             <button id="bt_upload">上传</button>
-            <p>生成的链接</p>
-            <!--            <label for="txt_content"></label>-->
-            <input id="txt_content" type="text" value="" class="url_input">
-
         </div>
+
+
     </div>
 
 
@@ -184,90 +180,26 @@
 
 
 <script type="text/javascript">
-    /**
-     * @act      sina
-     * @version  1.2
-     * @author  2kqq
-     */
-
-    function oCopy(obj) {
-        obj.select();
-        document.execCommand("Copy");
-        if (browserRedirect()) {
-            alert('设备类型为手机，有一定几率复制失败！请查看剪切板是否成功复制');
-        }
-    }
-
-    function browserRedirect() {
-        var sUserAgent = navigator.userAgent.toLowerCase();
-        var bIsIpad = sUserAgent.match(/ipad/i) === 'ipad';
-        var bIsIphone = sUserAgent.match(/iphone os/i) === 'iphone os';
-        var bIsMidp = sUserAgent.match(/midp/i) === 'midp';
-        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) === 'rv:1.2.3.4';
-        var bIsUc = sUserAgent.match(/ucweb/i) === 'web';
-        var bIsCE = sUserAgent.match(/windows ce/i) === 'windows ce';
-        var bIsWM = sUserAgent.match(/windows mobile/i) === 'windows mobile';
-        var bIsAndroid = sUserAgent.match(/android/i) === 'android';
-        if (bIsIpad || bIsIphone || bIsMidp || bIsUc7 || bIsUc || bIsCE || bIsWM || bIsAndroid) {
-            return 1;
-        }
-    }
-
-    $(document).ready(function () {
-        $('#imgLoading').click(function () {
-            $("#imgContent").toggle();
-        });
-    });
-</script>
-
-<script type="text/javascript">
-    function jsCopy() {
-        // 使用按钮复制
-        var input_str = document.getElementById("txt_content");
-        input_str.select()
-        document.execCommand("Copy"); //执行浏览器复制命令
-        if (browserRedirect()) {
-            alert('设备类型为手机，有一定几率复制失败！请查看剪切板是否成功复制');
-        } else {
-            alert("已复制好，可贴粘。");
-        }
-    }
-</script>
-
-<script type="text/javascript">
+    // 绑定按钮事件
     var submitBTN = document.getElementById("bt_upload");
+
     submitBTN.onclick = function (event) {
-        // 注意这里是 onclick 函数
-        console.log("click");
-        var formData = new FormData($("#uploadForm")[0]);
+
+        var content = $("#mytext").val();
+        console.log(content)
 
         $.ajax({
-            url: "/",
+            url: "/copycontent",
             type: "POST",
-            data: formData,
-            cache: false,
-            processData: false,
-            contentType: false,
+            data: {"result": content},
+            contentType: "application/x-www-form-urlencoded",
             success: function (data) {
-                // console.log(data);
-                var url = data.data;
-
                 if (data.code != 0) {
-                    console.log("不等于")
-                    alert(data.message)
-
+                    console.log("error")
+                    alert("写入缓存失败")
                 } else {
-
-                    var input_str = document.getElementById("txt_content");
-                    $("#txt_content").val(url);
-                    input_str.value = url;
-                    input_str.select()
-                    document.execCommand("Copy"); //执行浏览器复制命令
-                    if (browserRedirect()) {
-                        alert('设备类型为手机，有一定几率复制失败！请查看剪切板是否成功复制');
-                    } else {
-                        alert("已复制好，可贴粘。");
-                    }
+                    console.log(data.result)
+                    $("#tips").text("已经写入缓存");
                 }
             },
             fail: function (data) {
@@ -277,6 +209,7 @@
         })
 
     }
+
 </script>
 
 </html>

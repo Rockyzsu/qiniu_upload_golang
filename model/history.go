@@ -5,3 +5,9 @@ type History struct {
 	Url     string `json:"Url"`
 	Updated string `json:"Updated"`
 }
+
+type ContentText struct {
+	Id      int    `json:"id"`
+	Text    string `json:"text"`
+	Updated string `json:"updated"`
+}

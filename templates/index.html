@@ -188,19 +188,8 @@
 
 
 <script type="text/javascript">
-    /**
-     * @act      sina
-     * @version  1.2
-     * @author  2kqq
-     */
 
-    function oCopy(obj) {
-        obj.select();
-        document.execCommand("Copy");
-        if (browserRedirect()) {
-            alert('设备类型为手机，有一定几率复制失败！请查看剪切板是否成功复制');
-        }
-    }
+
 
     function browserRedirect() {
         var sUserAgent = navigator.userAgent.toLowerCase();
