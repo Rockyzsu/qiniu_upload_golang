@@ -50,7 +50,7 @@
         {{ range $v := .history}}
         <tr>
             <td>{{ $v.Id }}</td>
-            <td>{{ $v.Url }}</td>
+            <td><a href="{{$v.Url}}">{{ $v.Url }}</a></td>
             <td>{{ $v.Updated }}</td>
         </tr>
         {{ end }}
