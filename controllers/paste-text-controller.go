@@ -9,7 +9,7 @@ import (
 
 //上传记录
 func ListHistory(ctx *gin.Context) {
-	hist := service.GetRecord()
+	hist := service.GetImageRecord()
 	ctx.HTML(http.StatusOK, "ilist.html", gin.H{"history": hist})
 }
 

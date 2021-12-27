@@ -4,7 +4,7 @@
     <meta charset='UTF-8'>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <title>七牛图床 - 文字粘贴</title>
+    <title>删除图片</title>
 
     <link rel='stylesheet' href='https://cdn.bootcss.com/normalize/5.0.0/normalize.min.css'>
     <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
@@ -159,16 +159,10 @@
     </div>
 
     <div id='content'>
-        <textarea rows="10" cols="30" id="mytext"></textarea>
-        <h2 id="tips">文本复制粘贴</h2>
-
-
-        <p class="imgType" id="imgType"></p>
-        <br>
-
+        <h2><label for="mytext">输入删除图片的链接</label></h2><textarea rows="2" cols="30" id="mytext"></textarea>
+        <h2 id="tips"></h2>
         <div class="wrapper">
-            <button id="bt_upload">上传</button>
-<!--            <button id="bt_history">查看</button>-->
+            <button id="bt_delete">删除</button>
         </div>
 
 
@@ -182,30 +176,30 @@
 
 <script type="text/javascript">
     // 绑定按钮事件
-    var submitBTN = document.getElementById("bt_upload");
+    var submitBTN = document.getElementById("bt_delete");
 
     submitBTN.onclick = function (event) {
 
-        var content = $("#mytext").val();
-        console.log(content)
-
+        var url = $("#mytext").val();
         $.ajax({
-            url: "/copycontent",
-            type: "POST",
-            data: {"result": content},
+            url: "/delimage",
+            type: "POST", // delete方式 失效
+            data: {"url": url},
             contentType: "application/x-www-form-urlencoded",
             success: function (data) {
-                if (data.code !== 0) {
-                    console.log("error")
-                    alert("写入缓存失败")
+                console.log(data)
+                if (data.code == 0) {
+                    $("#tips").text("删除失败!")
+                    $("#mytext").val('')
+
                 } else {
-                    console.log(data.result)
-                    $("#tips").text("已经写入缓存");
+                    $("#tips").text("删除成功!");
                     $("#mytext").val('')
                 }
             },
             fail: function (data) {
-                alert("上传失败");
+                console.log(data)
+                $("#tips").text("删除失败!");
                 console.log("上传失败");
             }
         })

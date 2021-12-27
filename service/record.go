@@ -6,16 +6,17 @@ import (
 	"time"
 )
 
-func UpdateRecord(url string) bool {
+func InsertImageRecord(url string) bool {
 
-	cursor, err := DB.Prepare("insert into tb_image_upload(url,updated)value (?,?)")
+	cursor, err := DB.Prepare("insert into tb_image_upload(url,updated,isDeleted)value (?,?,?)")
 	if err != nil {
 		log.Println(err)
 		return false
 	}
 	defer cursor.Close()
-	current := time.Now().Format("2006-01-01 15:04:05")
-	result, err := cursor.Exec(url, current)
+	current := time.Now().Format("2006-01-02 15:04:05")
+	result, err := cursor.Exec(url, current, false)
+
 	if err != nil {
 		log.Println(err)
 		return false
@@ -30,9 +31,9 @@ func UpdateRecord(url string) bool {
 
 type HIST []model.History
 
-func GetRecord() HIST {
+func GetImageRecord() HIST {
 
-	rows, err := DB.Query("select id,url,updated from tb_image_upload order by id desc limit 50")
+	rows, err := DB.Query("select id,url,updated from tb_image_upload where isDeleted=0 order by id desc limit 50")
 	if err != nil {
 		log.Println("查询url失败")
 		log.Fatal(err)
@@ -86,6 +87,27 @@ func UpdateContent(text string) bool {
 	defer cursor.Close()
 	current := time.Now().Format("2006-01-01 15:04:05")
 	result, err := cursor.Exec(text, current)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	if id, err := result.LastInsertId(); err == nil {
+		log.Println("insert id ", id)
+		return true
+	} else {
+		return false
+	}
+}
+
+func DeleteImageRecord(url string) bool {
+	//删除图片后把状态修改
+	cursor, err := DB.Prepare("update tb_image_upload set isDeleted=true where url=?")
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	defer cursor.Close()
+	result, err := cursor.Exec(url)
 	if err != nil {
 		log.Println(err)
 		return false

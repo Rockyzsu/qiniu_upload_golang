@@ -65,7 +65,7 @@ func UploadPage(ctx *gin.Context) {
 			log.Fatal("Error")
 		}
 		//fmt.Println("上传成功")
-		status := service.UpdateRecord(urlpath)
+		status := service.InsertImageRecord(urlpath)
 		if status {
 			ctx.JSON(http.StatusOK, gin.H{
 				"code":    0,
@@ -82,4 +82,24 @@ func UploadPage(ctx *gin.Context) {
 		return
 	}
 
+}
+
+func DeleteImage(ctx *gin.Context) {
+	if ctx.Request.Method == "GET" {
+		ctx.HTML(http.StatusOK, "delete.html", nil)
+		return
+	}
+
+	if ctx.Request.Method == "POST" {
+
+		url := ctx.PostForm("url")
+		ret := service.DeleteImage(url)
+		var status int
+		if ret {
+			status = 1
+		}
+		service.DeleteImageRecord(url)
+		ctx.JSON(http.StatusOK, gin.H{"data": status, "status": "great"})
+		return
+	}
 }

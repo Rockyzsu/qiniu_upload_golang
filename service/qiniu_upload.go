@@ -11,7 +11,9 @@ package service
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
+	"strings"
 
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
@@ -34,11 +36,11 @@ func (this *FileInfo) FileExit() bool {
 }
 
 func (this *FileInfo) GetFilename() string {
-	fileInfo, err := os.Stat(this.path)
+	fileInfo, err := os.Stat(this.path) //全路径
 	if err != nil {
 		return ""
 	}
-	return fileInfo.Name()
+	return fileInfo.Name() // 文件名,没有路径
 }
 
 func (this *FileInfo) SetFilename() {
@@ -151,4 +153,39 @@ func (this *QiniuFileInfo) Exist(filename string) bool {
 func CheckExist(filename string) bool {
 	q_file := QiniuFileInfo{}
 	return q_file.Exist(filename)
+}
+
+func (this *QiniuFileInfo) Delete(url string) error {
+	this.init()
+	//fmt.Println("space", this.user.space)
+
+	//fmt.Println(url)
+	url = strings.Trim(url, "")
+	string_list := strings.Split(url, this.user.space)
+	//fmt.Println(string_list)
+	//fmt.Println(len(string_list))
+	if len(string_list) != 2 {
+		return fmt.Errorf("%s", "input url error")
+	}
+	bucketManager := storage.NewBucketManager(this.mac, &this.cfg)
+	err := bucketManager.Delete(this.user.bucket, string_list[1]) // 除去域名的
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	// 一般删除完了cdn还会缓存一段时间,如果需要马上删除,需要到七牛云上刷新一下缓存
+
+	return nil
+}
+
+func DeleteImage(url string) bool {
+	// url 全路径
+
+	fileInfo := QiniuFileInfo{}
+	err := fileInfo.Delete(url)
+	if err != nil {
+		return false
+	}
+
+	return true
 }
