@@ -168,6 +168,7 @@
 
         <div class="wrapper">
             <button id="bt_upload">上传</button>
+<!--            <button id="bt_history">查看</button>-->
         </div>
 
 
@@ -194,12 +195,13 @@
             data: {"result": content},
             contentType: "application/x-www-form-urlencoded",
             success: function (data) {
-                if (data.code != 0) {
+                if (data.code !== 0) {
                     console.log("error")
                     alert("写入缓存失败")
                 } else {
                     console.log(data.result)
                     $("#tips").text("已经写入缓存");
+                    $("#mytext").val('')
                 }
             },
             fail: function (data) {

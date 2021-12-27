@@ -33,9 +33,12 @@ func main() {
 	router.GET("/", controllers.Index)
 	router.POST("/", controllers.UploadPage)
 	router.GET("/list", controllers.ListHistory)
+	router.GET("/l", controllers.ListHistory) //快捷方式
 	router.GET("/copy", controllers.CopyTextIndex)
+	router.GET("/c", controllers.CopyTextIndex)
 	router.POST("/copycontent", controllers.HandlerCopyContent)
 	router.GET("/paste", controllers.GetHistoryText)
+	router.GET("/p", controllers.GetHistoryText)
 
 	log.Fatalln(router.Run(":8080"))
 }
