@@ -1,0 +1,166 @@
+<html lang="CN">
+<head>
+    <meta charset="ansi"/>
+    <title>图片区</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+
+    <style>
+        .div_top {
+            width: 100%;
+            height: 56px;
+            background-color: #777;
+        }
+
+        .div_title {
+            width: 100%;
+            height: 100px;
+            background-color: #555;
+            margin-top: 10px;
+        }
+
+        .div_body {
+            width: 100%;
+            height: 1000px;
+            background-color: #bbb;
+            margin-top: 10px;
+        }
+
+        .div_menu {
+            width: 5%;
+            height: 56px;
+            float: left;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            line-height: 56px;
+
+        }
+
+        .color-menu1 {
+            background-color: #999;
+        }
+
+        .color-menu2 {
+            background-color: #666;
+        }
+
+        .color-menu3 {
+            background-color: #999;
+        }
+
+        .color-menu4 {
+            background-color: #666;
+        }
+
+        .div_headimage {
+            height: 100px;
+            width: 100px;
+            margin-left: 5%;
+            float: left;
+        }
+
+        .div_titledata {
+            height: 24px;
+            width: 166px;
+            float: left;
+            font-size: 22px;
+            margin-left: 2%;
+            color: #f0ffff;
+        }
+
+        .div_titledata2 {
+            height: 24px;
+            width: 600px;
+            float: left;
+            font-size: 22px;
+            margin-left: 2%;
+            color: #f0ffff;
+        }
+
+        .div_photo {
+            height: 300px;
+            width: 20%;
+            float: left;
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+        .div_phototime {
+            height: 25px;
+            width: 250px;
+            text-align: left;
+            line-height: 25px;
+            background-color: #A9A9A9;
+        }
+
+        .div_end {
+            text-align: center;
+            width: 100%;
+            height: 100px;
+            float: left;
+            background-color: #555;
+
+    </style>
+</head>
+
+<body style="background-color:#969696">
+<script type="text/javascript">
+    function removeImage(element) {
+        console.log('deleting image')
+        console.log(element.id)
+
+        $.ajax({
+            url: "/image/remove",
+            method: 'POST',
+            data: {identifier: element.id},
+            success: function (result) {
+                location.reload();
+                console.log(result);
+                // if (result.data === 1) {
+                //
+                // }
+            },
+            fail:function (result){
+                console.log(result);
+                location.reload();
+                // if (result.data === 1) {
+                //     location.reload();
+                // }
+            }
+        });
+    }
+</script>
+
+<div class="div_top">
+    <div class="div_menu color-menu1" style="margin-left:5%">相册</div>
+    <div class="div_menu color-menu2">照片</div>
+    <div class="div_menu color-menu2" style=" float:right">反馈</div>
+</div>
+
+<div class="div_title">
+    <div class="div_titledata"><b>说说和日志相册</b></div>
+    <div class="div_titledata2"><b>上传照片/视频 批量管理</b></div>
+</div>
+<div class="div_body">
+    {{ range $v := .history}}
+
+
+    <div class="div_photo">
+        <img height=250 width=250 src="{{$v.Url}}"/>
+        <div id="" class="div_phototime"><a href="{{ $v.Url }}">{{ $v.Url }}</a>
+        </div>
+        <button class="removeBT" id="{{ $v.Url }}" onclick="removeImage(this)">删除</button>
+
+    </div>
+
+
+    {{ end }}
+
+</div>
+
+<div class="div_end">
+
+</div>
+
+</body>
+</html>

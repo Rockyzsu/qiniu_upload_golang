@@ -168,8 +168,11 @@ func (this *QiniuFileInfo) Delete(url string) error {
 		return fmt.Errorf("%s", "input url error")
 	}
 	bucketManager := storage.NewBucketManager(this.mac, &this.cfg)
+	fmt.Println(string_list[0])
+	fmt.Println(string_list[1])
 	err := bucketManager.Delete(this.user.bucket, string_list[1]) // 除去域名的
 	if err != nil {
+		log.Println("删除文件失败")
 		log.Println(err)
 		return err
 	}
@@ -184,6 +187,7 @@ func DeleteImage(url string) bool {
 	fileInfo := QiniuFileInfo{}
 	err := fileInfo.Delete(url)
 	if err != nil {
+		fmt.Println(err)
 		return false
 	}
 

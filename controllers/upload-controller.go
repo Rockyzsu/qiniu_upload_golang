@@ -103,3 +103,27 @@ func DeleteImage(ctx *gin.Context) {
 		return
 	}
 }
+
+func DeleteImageByBT(ctx *gin.Context) {
+	// 按钮删除图片
+	if ctx.Request.Method == "POST" {
+
+		url := ctx.PostForm("identifier")
+		//fmt.Println(url)
+		var status int
+
+		ret := service.DeleteImage(url)
+		if ret {
+			status = 1
+		}
+		service.DeleteImageRecord(url)
+		ctx.JSON(http.StatusOK, gin.H{"data": status, "status": "great"})
+		return
+	}
+}
+
+func GetAllImage(ctx *gin.Context) {
+	// 获取所有图片
+	status := 200
+	ctx.JSON(http.StatusOK, gin.H{"data": status, "status": "great"})
+}

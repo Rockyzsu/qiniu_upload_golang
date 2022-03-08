@@ -36,6 +36,19 @@ Windows:
 ```bigquery
 this.cfg.Zone = &storage.ZoneHuanan // 默认用的华南地区，其他地区的需要在这里改
 ```
+
+* 数据库配置文件
+```js
+service/config.json
+{
+  "username": "root",
+  "password": "",
+  "host": "127.0.0.1",
+  "port": 2306,
+  "db": "db"
+}
+```
+
 ### 运行
 
 ```go

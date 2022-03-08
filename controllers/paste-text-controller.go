@@ -10,7 +10,12 @@ import (
 //上传记录
 func ListHistory(ctx *gin.Context) {
 	hist := service.GetImageRecord()
-	ctx.HTML(http.StatusOK, "ilist.html", gin.H{"history": hist})
+	ctx.HTML(http.StatusOK, "imageList.html", gin.H{"history": hist})
+}
+
+func ListHistorys(ctx *gin.Context) {
+	hist := service.GetImageRecord()
+	ctx.HTML(http.StatusOK, "images.html", gin.H{"history": hist})
 }
 
 //临时粘贴板
