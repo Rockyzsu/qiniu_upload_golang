@@ -237,6 +237,6 @@ func Walkaround() []string {
 	imageList := fileInfo.Walk()
 
 	//TODO： 排序
-	return imageList[:50]
+	return imageList
 
 }

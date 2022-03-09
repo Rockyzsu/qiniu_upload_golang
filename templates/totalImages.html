@@ -2,7 +2,98 @@
 <head>
     <meta charset="ansi"/>
     <title>所有图片</title>
-    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+    <script src="static/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("document").ready(function () {
+            max_value=20
+            $("#bt1").click(function () {
+                if (i == 1) {
+                    i = max_value;
+                    $(".show").text(i);
+                } else {
+                    i = i - 1;
+                    $(".show").text(i);
+
+                }
+                NextPage(i)
+
+            });
+
+            $("#bt2").click(function () {
+                if (i == max_value) {
+                    i = 1;
+                    $(".show").text(i);
+                } else {
+                    i = 1 + i;
+                    $(".show").text(i);
+                }
+            NextPage(i)
+            }
+        )});
+
+function NextPage(page) {
+    console.log('next page')
+    console.log(page)
+    $.ajax({
+        url: "/image/next",
+        method: 'POST',
+        data: {page: page},
+        success: function (result) {
+
+            $("#id_body").empty();
+            for (var i=0;i<result.TotalImage.length;i++)
+            {
+
+                img = result.TotalImage[i]
+
+                image_div=`<div class="div_photo">
+                   <img height=250 width=250 src="${img}"/>
+                  <div id="" class="div_phototime"><a href="${img}">${img}</a>
+                    </div>
+                    <button class="removeBT" id="${img}" onclick="removeImage(this)">删除</button>
+
+                </div>`
+                $("#id_body").append(image_div);
+            }
+        },
+        fail: function (result) {
+            console.log("failed")
+            console.log(result);
+            // location.reload();
+            // if (result.data === 1) {
+            //     location.reload();
+            // }
+        }
+    });
+
+}
+        function removeImage(element) {
+            console.log('deleting image')
+            console.log(element.id)
+
+            $.ajax({
+                url: "/image/remove",
+                method: 'POST',
+                data: {identifier: element.id},
+                success: function (result) {
+                    location.reload();
+                    console.log(result);
+                    // if (result.data === 1) {
+                    //
+                    // }
+                },
+                fail: function (result) {
+                    console.log(result);
+                    location.reload();
+                    // if (result.data === 1) {
+                    //     location.reload();
+                    // }
+                }
+            });
+        }
+
+
+    </script>
 
     <style>
         .div_top {
@@ -119,97 +210,6 @@
 </head>
 
 <body style="background-color:#969696">
-<script type="text/javascript">
-    function removeImage(element) {
-        console.log('deleting image')
-        console.log(element.id)
-
-        $.ajax({
-            url: "/image/remove",
-            method: 'POST',
-            data: {identifier: element.id},
-            success: function (result) {
-                location.reload();
-                console.log(result);
-                // if (result.data === 1) {
-                //
-                // }
-            },
-            fail: function (result) {
-                console.log(result);
-                location.reload();
-                // if (result.data === 1) {
-                //     location.reload();
-                // }
-            }
-        });
-    }
-    function NextPageData(page) {
-        $.ajax({
-            url: "/image/next",
-            method: 'POST',
-            data: {page: page},
-            success: function (result) {
-                location.reload();
-                console.log(result);
-
-                {{ range $i,$v :=.TotalImage }}
-
-                <div class="div_photo">
-                    <img height=250 width=250 src="{{ $v }}?imageView2/0/w/250"/>
-                    <div id="" class="div_phototime"><a href="{{ $v }}">{{ $v }}</a>
-                    </div>
-                    <button class="removeBT" id="{{ $v }}" onclick="removeImage(this)">删除</button>
-
-                </div>
-
-
-                {{ end }}
-
-            },
-            fail: function (result) {
-                console.log(result);
-                location.reload();
-                // if (result.data === 1) {
-                //     location.reload();
-                // }
-            }
-        });
-    }
-    function buttonBind() {
-        var i = 1;
-        var max_value = 10;
-
-        $("document").ready(function () {
-
-            $("#bt1").click(function () {
-                if (i == 1) {
-                    i = max_value;
-
-                    $(".show").text(i);
-
-                } else {
-                    i = i - 1;
-                    $(".show").text(i);
-                }
-                NextPageData(i)
-            });
-
-            $("#bt2").click(function () {
-                if (i == max_value) {
-                    i = 1;
-                    $(".show").text(i);
-                } else {
-                    i = 1 + i;
-                    $(".show").text(i);
-                }
-                NextPageData(i);
-            });
-
-
-        });
-    }
-</script>
 
 <div class="div_top">
     <div class="div_menu color-menu1" style="margin-left:5%">相册</div>
@@ -222,34 +222,33 @@
     <div class="div_titledata2"><b>上传照片/视频 批量管理</b></div>
 </div>
 
-<div class="div_body">
+<div id="id_body" class="div_body">
     <script type="text/javascript">
-        for (var i=0;i<cars.length;i++)
+        allImage = {{ .TotalImage }}
+        node = allImage.length
+        for (var i=0;i<node;i++)
         {
-            document.write(cars[i] + "<br>");
+
+            console.log(allImage[i])
+            img = allImage[i]
+
+            image_div=`<div class="div_photo">
+                   <img height=250 width=250 src="${img}"/>
+                  <div id="" class="div_phototime"><a href="${img}"></a>
+                    </div>
+                    <button class="removeBT" id="tt" onclick="removeImage(this)">删除</button>
+
+                </div>`
+            $("#id_body").append(image_div);
         }
     </script>
 
-    {{ range $i,$v :=.TotalImage }}
-
-    <div class="div_photo">
-        <img height=250 width=250 src="{{ $v }}?imageView2/0/w/250"/>
-        <div id="" class="div_phototime"><a href="{{ $v }}">{{ $v }}</a>
-        </div>
-        <button class="removeBT" id="{{ $v }}" onclick="removeImage(this)">删除</button>
-
-    </div>
-
-
-    {{ end }}
 
 </div>
 
 
 <div class="div_end">
-    <script type="text/javascript">
-        buttonBind()
-    </script>
+
 
     <div>
         <div class="anniu" id="bt1"><img src="static/left.jpeg" width=100px height=50px></div>

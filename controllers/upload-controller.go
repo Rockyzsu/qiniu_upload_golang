@@ -9,10 +9,6 @@ import (
 	"qiniu/service"
 )
 
-func Index(ctx *gin.Context) {
-	ctx.HTML(http.StatusOK, "index.html", nil)
-}
-
 //上传页面 index
 func UploadPage(ctx *gin.Context) {
 	//获取普通文本

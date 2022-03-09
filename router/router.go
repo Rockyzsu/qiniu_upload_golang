@@ -48,6 +48,8 @@ func Router() *gin.Engine {
 	router.GET("/walk", controllers.WalkImages)
 
 	router.GET("/next", controllers.NextPage)
+	router.GET("/node", controllers.DynamicAddNode)
+	router.POST("/image/next", controllers.NextImagePage)
 
 	return router
 }

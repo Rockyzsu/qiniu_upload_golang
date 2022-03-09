@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="static/jquery.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("#append").click(function(){
+        var p = "<p>This is append p</p>";//添加元素的html代码
+        $("#div1").append(p);//调用append()函数添加元素
+      });
+      $("#clear").click(function(){
+
+        $("#div1").empty();//<span style="font-family: Arial, Helvetica, sans-serif;">empty()</span><span style="font-family: Arial, Helvetica, sans-serif;">清除div1下所有的字元素  remove()是清除div1，包括div1下的所有东西。</span>
+      });
+    });
+
+  </script>
+</head>
+
+<body>
+
+<button id='append'>在 div 中添加元素</button>
+<button id='clear'>清空div所有元素</button>
+
+<div id="div1" style="border:1px solid black;background-color:yellow;">
+  This is some text in the div.
+  <p>This is a paragraph in the div.</p>
+  <p>This is another paragraph in the div.</p>
+</div>
+
+<br>
+
+</body>
+</html>
