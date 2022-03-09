@@ -193,3 +193,50 @@ func DeleteImage(url string) bool {
 
 	return true
 }
+
+func (this *QiniuFileInfo) Walk() []string {
+	// 遍历资源
+	this.init()
+	bucketManager := storage.NewBucketManager(this.mac, &this.cfg)
+
+	fmt.Println("\nStart walk\n")
+	limit := 1000
+	prefix_list := []string{"picgo", "sharex", "typora", "upic", "uploadas", "webupload"}
+	delimiter := ""
+	//初始列举marker为空
+	marker := ""
+
+	imageList := make([]string, 0)
+	for _, prefix := range prefix_list {
+		for {
+			entries, _, nextMarker, hasNext, err := bucketManager.ListFiles(this.user.bucket, prefix, delimiter, marker, limit)
+			if err != nil {
+				fmt.Println("list error,", err)
+				break
+			}
+
+			//print entries
+			for _, entry := range entries {
+				imageList = append(imageList, this.user.space+entry.Key)
+			}
+
+			if hasNext {
+				marker = nextMarker
+			} else {
+				//list end
+				break
+			}
+
+		}
+	}
+	return imageList
+}
+
+func Walkaround() []string {
+	fileInfo := QiniuFileInfo{}
+	imageList := fileInfo.Walk()
+
+	//TODO： 排序
+	return imageList[:50]
+
+}

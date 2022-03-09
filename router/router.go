@@ -20,7 +20,8 @@ func Router() *gin.Engine {
 
 	// 图片
 	router.GET("/", controllers.Index)
-	router.POST("/", controllers.UploadPage)     //上传
+	router.POST("/", controllers.UploadPage) //上传
+
 	router.GET("/list", controllers.ListHistory) //显示url
 	router.GET("/l", controllers.ListHistory)    //快捷方式
 
@@ -40,8 +41,13 @@ func Router() *gin.Engine {
 	router.POST("/image/remove", controllers.DeleteImageByBT)
 
 	// 七牛的所有图片
-	router.GET("/q", controllers.GetAllImage)
-	router.GET("/qiniu", controllers.GetAllImage)
+	//router.GET("/q", controllers.GetAllImage)
+	//router.GET("/qiniu", controllers.GetAllImage)
+
+	router.GET("/w", controllers.WalkImages)
+	router.GET("/walk", controllers.WalkImages)
+
+	router.GET("/next", controllers.NextPage)
 
 	return router
 }

@@ -40,6 +40,5 @@ func HandlerCopyContent(ctx *gin.Context) {
 func GetHistoryText(ctx *gin.Context) {
 	//　获取历史记录
 	ret := service.GetTextHistory()
-	//fmt.Println(ret)
 	ctx.HTML(http.StatusOK, "listtext.html", gin.H{"texts": ret})
 }

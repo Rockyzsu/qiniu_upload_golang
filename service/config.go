@@ -28,8 +28,8 @@ type UserInfo struct {
 const SOURCE = "webupload"
 
 func NewUserInfo() *UserInfo {
-	print("space name")
-	print(os.Getenv("qiniu_space"))
+	//print("space name")
+	//print(os.Getenv("qiniu_space"))
 	return &UserInfo{
 		accessKey: os.Getenv("qiniu_access_key"),
 		secretKey: os.Getenv("qiniu_secret_key"),

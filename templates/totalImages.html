@@ -1,0 +1,264 @@
+<html lang="CN">
+<head>
+    <meta charset="ansi"/>
+    <title>所有图片</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+
+    <style>
+        .div_top {
+            width: 100%;
+            height: 56px;
+            background-color: #777;
+        }
+
+        .div_title {
+            width: 100%;
+            height: 100px;
+            background-color: #555;
+            margin-top: 10px;
+        }
+
+        .div_body {
+            width: 100%;
+            height: 1000px;
+            background-color: #bbb;
+            margin-top: 10px;
+        }
+
+        .div_menu {
+            width: 5%;
+            height: 56px;
+            float: left;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            line-height: 56px;
+
+        }
+
+        .color-menu1 {
+            background-color: #999;
+        }
+
+        .color-menu2 {
+            background-color: #666;
+        }
+
+        .color-menu3 {
+            background-color: #999;
+        }
+
+        .color-menu4 {
+            background-color: #666;
+        }
+
+
+        .div_titledata {
+            height: 24px;
+            width: 166px;
+            float: left;
+            font-size: 22px;
+            margin-left: 2%;
+            color: #f0ffff;
+        }
+
+        .div_titledata2 {
+            height: 24px;
+            width: 600px;
+            float: left;
+            font-size: 22px;
+            margin-left: 2%;
+            color: #f0ffff;
+        }
+
+        .div_photo {
+            height: 300px;
+            width: 20%;
+            float: left;
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+        .div_phototime {
+            height: 25px;
+            width: 250px;
+            text-align: left;
+            line-height: 25px;
+            background-color: #A9A9A9;
+        }
+
+        .div_end {
+            text-align: center;
+            width: 100%;
+            height: 10%;
+            float: left;
+            background-color: #555;
+        }
+
+        .anniu {
+            width: 100px;
+            height: 50px;
+            background: red;
+
+
+        }
+
+        .show {
+            width: 100px;
+            height: 50px;
+            background: rgb(143, 231, 163);
+            text-align: center;
+            line-height: 50px;
+
+        }
+
+        .anniu, .show {
+            float: left;
+        }
+    </style>
+</head>
+
+<body style="background-color:#969696">
+<script type="text/javascript">
+    function removeImage(element) {
+        console.log('deleting image')
+        console.log(element.id)
+
+        $.ajax({
+            url: "/image/remove",
+            method: 'POST',
+            data: {identifier: element.id},
+            success: function (result) {
+                location.reload();
+                console.log(result);
+                // if (result.data === 1) {
+                //
+                // }
+            },
+            fail: function (result) {
+                console.log(result);
+                location.reload();
+                // if (result.data === 1) {
+                //     location.reload();
+                // }
+            }
+        });
+    }
+    function NextPageData(page) {
+        $.ajax({
+            url: "/image/next",
+            method: 'POST',
+            data: {page: page},
+            success: function (result) {
+                location.reload();
+                console.log(result);
+
+                {{ range $i,$v :=.TotalImage }}
+
+                <div class="div_photo">
+                    <img height=250 width=250 src="{{ $v }}?imageView2/0/w/250"/>
+                    <div id="" class="div_phototime"><a href="{{ $v }}">{{ $v }}</a>
+                    </div>
+                    <button class="removeBT" id="{{ $v }}" onclick="removeImage(this)">删除</button>
+
+                </div>
+
+
+                {{ end }}
+
+            },
+            fail: function (result) {
+                console.log(result);
+                location.reload();
+                // if (result.data === 1) {
+                //     location.reload();
+                // }
+            }
+        });
+    }
+    function buttonBind() {
+        var i = 1;
+        var max_value = 10;
+
+        $("document").ready(function () {
+
+            $("#bt1").click(function () {
+                if (i == 1) {
+                    i = max_value;
+
+                    $(".show").text(i);
+
+                } else {
+                    i = i - 1;
+                    $(".show").text(i);
+                }
+                NextPageData(i)
+            });
+
+            $("#bt2").click(function () {
+                if (i == max_value) {
+                    i = 1;
+                    $(".show").text(i);
+                } else {
+                    i = 1 + i;
+                    $(".show").text(i);
+                }
+                NextPageData(i);
+            });
+
+
+        });
+    }
+</script>
+
+<div class="div_top">
+    <div class="div_menu color-menu1" style="margin-left:5%">相册</div>
+    <div class="div_menu color-menu2">照片</div>
+    <div class="div_menu color-menu2" style=" float:right">反馈</div>
+</div>
+
+<div class="div_title">
+    <div class="div_titledata"><b>说说和日志相册</b></div>
+    <div class="div_titledata2"><b>上传照片/视频 批量管理</b></div>
+</div>
+
+<div class="div_body">
+    <script type="text/javascript">
+        for (var i=0;i<cars.length;i++)
+        {
+            document.write(cars[i] + "<br>");
+        }
+    </script>
+
+    {{ range $i,$v :=.TotalImage }}
+
+    <div class="div_photo">
+        <img height=250 width=250 src="{{ $v }}?imageView2/0/w/250"/>
+        <div id="" class="div_phototime"><a href="{{ $v }}">{{ $v }}</a>
+        </div>
+        <button class="removeBT" id="{{ $v }}" onclick="removeImage(this)">删除</button>
+
+    </div>
+
+
+    {{ end }}
+
+</div>
+
+
+<div class="div_end">
+    <script type="text/javascript">
+        buttonBind()
+    </script>
+
+    <div>
+        <div class="anniu" id="bt1"><img src="static/left.jpeg" width=100px height=50px></div>
+
+        <div class="show">1</div>
+
+        <div class="anniu" id="bt2"><img src="static/right.jpeg" width=100px height=50px></div>
+    </div>
+</div>
+
+</body>
+</html>
