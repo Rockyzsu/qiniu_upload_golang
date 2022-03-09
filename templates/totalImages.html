@@ -5,7 +5,7 @@
     <script src="static/jquery.min.js"></script>
     <script type="text/javascript">
         $("document").ready(function () {
-            max_value=20
+            var max_value=200
             $("#bt1").click(function () {
                 if (i == 1) {
                     i = max_value;
@@ -68,8 +68,6 @@ function NextPage(page) {
 
 }
         function removeImage(element) {
-            console.log('deleting image')
-            console.log(element.id)
 
             $.ajax({
                 url: "/image/remove",
@@ -77,17 +75,10 @@ function NextPage(page) {
                 data: {identifier: element.id},
                 success: function (result) {
                     location.reload();
-                    console.log(result);
-                    // if (result.data === 1) {
-                    //
-                    // }
                 },
                 fail: function (result) {
-                    console.log(result);
                     location.reload();
-                    // if (result.data === 1) {
-                    //     location.reload();
-                    // }
+
                 }
             });
         }
@@ -234,7 +225,7 @@ function NextPage(page) {
 
             image_div=`<div class="div_photo">
                    <img height=250 width=250 src="${img}"/>
-                  <div id="" class="div_phototime"><a href="${img}"></a>
+                  <div id="" class="div_phototime"><a href="${img}">${img}</a>
                     </div>
                     <button class="removeBT" id="tt" onclick="removeImage(this)">删除</button>
 
