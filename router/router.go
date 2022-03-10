@@ -35,21 +35,17 @@ func Router() *gin.Engine {
 	router.GET("/p", controllers.GetHistoryText)
 
 	//删除 需要权限
-
 	router.GET("/d", controllers.DeleteImage) // 删除
 	router.POST("/delimage", controllers.DeleteImage)
 	router.POST("/image/remove", controllers.DeleteImageByBT)
 
-	// 七牛的所有图片
-	//router.GET("/q", controllers.GetAllImage)
-	//router.GET("/qiniu", controllers.GetAllImage)
-
+	// 获取所有图片
 	router.GET("/w", controllers.WalkImages)
 	router.GET("/walk", controllers.WalkImages)
+	router.POST("/image/next", controllers.WalkImages)
 
-	router.GET("/next", controllers.NextPage)
+	// 测试用
 	router.GET("/node", controllers.DynamicAddNode)
-	router.POST("/image/next", controllers.NextImagePage)
 
 	return router
 }

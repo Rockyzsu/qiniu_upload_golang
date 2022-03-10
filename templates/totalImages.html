@@ -5,8 +5,9 @@
     <script src="static/jquery.min.js"></script>
     <script type="text/javascript">
         $("document").ready(function () {
-            var max_value=200
-            $("#bt1").click(function () {
+            var max_value = {{ .length }}
+            var i = 1
+            $("#back").click(function () {
                 if (i == 1) {
                     i = max_value;
                     $(".show").text(i);
@@ -19,56 +20,58 @@
 
             });
 
-            $("#bt2").click(function () {
-                if (i == max_value) {
-                    i = 1;
-                    $(".show").text(i);
-                } else {
-                    i = 1 + i;
-                    $(".show").text(i);
+            $("#next").click(function () {
+                    if (i == max_value) {
+                        i = 1;
+                        $(".show").text(i);
+                    } else {
+                        i = 1 + i;
+                        $(".show").text(i);
+                    }
+                    NextPage(i)
                 }
-            NextPage(i)
-            }
-        )});
+            )
+        });
 
-function NextPage(page) {
-    console.log('next page')
-    console.log(page)
-    $.ajax({
-        url: "/image/next",
-        method: 'POST',
-        data: {page: page},
-        success: function (result) {
+        function NextPage(page) {
+            console.log('next page')
+            console.log(page)
+            $.ajax({
+                url: "/image/next",
+                method: 'POST',
+                data: {page: page},
+                success: function (result) {
 
-            $("#id_body").empty();
-            for (var i=0;i<result.TotalImage.length;i++)
-            {
+                    $("#id_body").empty();
+                    for (var i = 0; i < result.TotalImage.length; i++) {
 
-                img = result.TotalImage[i]
+                        img = result.TotalImage[i]
 
-                image_div=`<div class="div_photo">
+                        image_div = `<div class="div_photo">
                    <img height=250 width=250 src="${img}"/>
                   <div id="" class="div_phototime"><a href="${img}">${img}</a>
                     </div>
                     <button class="removeBT" id="${img}" onclick="removeImage(this)">删除</button>
 
                 </div>`
-                $("#id_body").append(image_div);
-            }
-        },
-        fail: function (result) {
-            console.log("failed")
-            console.log(result);
-            // location.reload();
-            // if (result.data === 1) {
-            //     location.reload();
-            // }
+                        $("#id_body").append(image_div);
+                    }
+                },
+                fail: function (result) {
+                    console.log("failed")
+                    console.log(result);
+                    // location.reload();
+                    // if (result.data === 1) {
+                    //     location.reload();
+                    // }
+                }
+            });
+
         }
-    });
 
-}
         function removeImage(element) {
-
+            console.log("remove image")
+            console.log(element.id)
             $.ajax({
                 url: "/image/remove",
                 method: 'POST',
@@ -215,19 +218,18 @@ function NextPage(page) {
 
 <div id="id_body" class="div_body">
     <script type="text/javascript">
-        allImage = {{ .TotalImage }}
+        allImage = {{ .TotalImage}}
         node = allImage.length
-        for (var i=0;i<node;i++)
-        {
+        for (var i = 0; i < node; i++) {
 
             console.log(allImage[i])
             img = allImage[i]
 
-            image_div=`<div class="div_photo">
+            image_div = `<div class="div_photo">
                    <img height=250 width=250 src="${img}"/>
                   <div id="" class="div_phototime"><a href="${img}">${img}</a>
                     </div>
-                    <button class="removeBT" id="tt" onclick="removeImage(this)">删除</button>
+                    <button class="removeBT" id="${img}" onclick="removeImage(this)">删除</button>
 
                 </div>`
             $("#id_body").append(image_div);
@@ -242,11 +244,12 @@ function NextPage(page) {
 
 
     <div>
-        <div class="anniu" id="bt1"><img src="static/left.jpeg" width=100px height=50px></div>
+        <div class="anniu" id="back"><img src="static/left.jpeg" width=100px height=50px></div>
 
         <div class="show">1</div>
 
-        <div class="anniu" id="bt2"><img src="static/right.jpeg" width=100px height=50px></div>
+        <div class="anniu" id="next"><img src="static/right.jpeg" width=100px height=50px></div>
+<!--        <div class="show">{{ .length }}</div>-->
     </div>
 </div>
 
