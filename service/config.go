@@ -25,6 +25,25 @@ type UserInfo struct {
 	space     string
 }
 
+type TencentUserInfo struct {
+	AccessKey string
+	SecretKey string
+	Host      []string
+}
+
+func NewTencentUserInfo() *TencentUserInfo {
+	//print("space name")
+	//print(os.Getenv("qiniu_space"))
+	host := os.Getenv("tencent_host")
+	http_host := fmt.Sprintf("https://%s.com", host)
+	https_host := fmt.Sprintf("https://www.%s.com", host)
+	return &TencentUserInfo{
+		AccessKey: os.Getenv("tencent_access_key"),
+		SecretKey: os.Getenv("tencent_secret_key"),
+		Host:      []string{http_host, https_host},
+	}
+}
+
 const SOURCE = "webupload"
 
 func NewUserInfo() *UserInfo {
