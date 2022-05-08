@@ -35,8 +35,8 @@ func NewTencentUserInfo() *TencentUserInfo {
 	//print("space name")
 	//print(os.Getenv("qiniu_space"))
 	host := os.Getenv("tencent_host")
-	http_host := fmt.Sprintf("https://%s.com", host)
-	https_host := fmt.Sprintf("https://www.%s.com", host)
+	http_host := fmt.Sprintf("https://%s", host)
+	https_host := fmt.Sprintf("https://www.%s", host)
 	return &TencentUserInfo{
 		AccessKey: os.Getenv("tencent_access_key"),
 		SecretKey: os.Getenv("tencent_secret_key"),
