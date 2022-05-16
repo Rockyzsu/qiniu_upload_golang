@@ -14,7 +14,7 @@ import (
 func TencentUpdateCDN(ctx *gin.Context) {
 	// 更新cdn数据
 	result := updateCDN()
-	ctx.JSON(http.StatusOK, gin.H{"cdn result": result})
+	ctx.JSON(http.StatusOK, gin.H{"code": 0, "res": result})
 }
 
 func updateCDN() bool {

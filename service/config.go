@@ -88,7 +88,7 @@ func init() {
 	// 外部的读取的时候，当前目录是根目录，所以需要完整的路径
 	conf, err := JsonParse("service/config.json")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("请创建server/config.json 配置文件")
 	}
 	DB = conf.InitDB()
 }

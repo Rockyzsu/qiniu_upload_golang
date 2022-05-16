@@ -44,7 +44,12 @@ func Router() *gin.Engine {
 	router.GET("/walk", controllers.WalkImages)
 	router.POST("/image/next", controllers.WalkImages)
 
-	router.GET("/cloud", controllers.TencentUpdateCDN)
+	//router.GET("/cloud", controllers.TencentUpdateCDN)
+
+	router.GET("/cloud", controllers.ServerManager)
+	router.POST("/update-site1", controllers.BaiduSite1)
+	router.POST("/update-site2", controllers.BaiduSite2)
+	router.POST("/update-cdn", controllers.TencentUpdateCDN)
 
 	// 测试用
 	router.GET("/node", controllers.DynamicAddNode)

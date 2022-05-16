@@ -6,7 +6,6 @@ import (
 )
 
 func TestSpider(t *testing.T) {
-	Spider()
-	//fmt.Println(result)
+	print(GetPushUrlsWP(1))
 	fmt.Println("End")
 }

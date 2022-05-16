@@ -4,7 +4,7 @@
     <meta charset='UTF-8'>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <title>删除图片</title>
+    <title>云主机</title>
 
     <link rel='stylesheet' href='//cdn.bootcss.com/normalize/5.0.0/normalize.min.css'>
     <script src="//cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
@@ -61,7 +61,7 @@
             text-align: center;
             width: 320px;
             margin: 0 auto;
-            padding: 0 0 70px 0;
+            padding: 0 0 20px 0;
         }
 
         #container #content h1 {
@@ -82,7 +82,6 @@
             color: #CCC;
             font-size: 14px;
             margin: 0 10px;
-            /*margin: auto;*/
             transition: color .3s ease-in-out;
             -webkit-transition: color .3s ease-in-out;
             line-height: 40px;
@@ -157,14 +156,27 @@
         <img alt="公众号" src='static/30天尝试新事情.jpg' id="imgLoading"
              class="Rotation img" title="显示与隐藏"/>
     </div>
-
     <div id='content'>
-        <h2><label for="mytext">输入删除图片的链接</label></h2><textarea rows="2" cols="30" id="mytext"></textarea>
-        <h2 id="tips"></h2>
-        <div class="wrapper">
-            <button id="bt_delete">删除</button>
-        </div>
+        <h2>网站管理同步</h2>
+        <h5>百度站长</h5>
 
+        <p class="imgType" id="imgType"></p>
+        <br>
+        <br>
+
+
+        <div class="wrapper">
+            <button id="url_update">更新URL资源 site 1 </button>
+            <input id="txt_content" type="text" value="" class="url_input">
+        </div>
+        <div class="wrapper">
+            <button id="url_update2">更新URL资源 site 2 </button>
+            <input id="txt_content2" type="text" value="" class="url_input">
+        </div>
+        <div class="wrapper">
+            <button id="cdn_update">腾讯CDN更新</button>
+            <input id="cdn_content" type="text" value="" class="url_input">
+        </div>
 
     </div>
 
@@ -175,37 +187,110 @@
 
 
 <script type="text/javascript">
-    // 绑定按钮事件
-    var submitBTN = document.getElementById("bt_delete");
 
+
+    $(document).ready(function () {
+        $('#imgLoading').click(function () {
+            $("#imgContent").toggle();
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+    var submitBTN = document.getElementById("url_update");
     submitBTN.onclick = function (event) {
-
-        var url = $("#mytext").val();
+        // 注意这里是 onclick 函数
+        console.log("click");
         $.ajax({
-            url: "/delimage",
-            type: "POST", // delete方式 失效
-            data: {"url": url},
-            contentType: "application/x-www-form-urlencoded",
+            url: "/update-site1",
+            type: "POST",
+            data: null,
+            cache: false,
+            processData: false,
+            contentType: false,
             success: function (data) {
-                console.log(data)
-                if (data.code == 0) {
-                    $("#tips").text("删除失败!")
-                    $("#mytext").val('')
+                console.log(data);
 
+                if (data.code !== 0) {
+                    alert('更新失败')
                 } else {
-                    $("#tips").text("删除成功!");
-                    $("#mytext").val('')
+                    new_str = data.res + " " + data.count
+                    $("#txt_content").val(new_str);
+                    alert('更新资源成功！')
                 }
             },
             fail: function (data) {
-                console.log(data)
-                $("#tips").text("删除失败!");
-                console.log("上传失败");
+                alert("更新失败!");
             }
         })
 
     }
 
+    var submitBTN2 = document.getElementById("url_update2");
+    submitBTN2.onclick = function (event) {
+        // 注意这里是 onclick 函数
+        console.log("click");
+        $.ajax({
+            url: "/update-site2",
+            type: "POST",
+            data: null,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data);
+
+                if (data.code !== 0) {
+                    alert('更新失败')
+                } else {
+                    new_str = data.res + " " + data.count
+                    $("#txt_content2").val(new_str);
+                    alert('更新资源成功！')
+
+                }
+            },
+            fail: function (data) {
+                alert("更新失败!");
+            }
+        })
+
+    }
+
+
+</script>
+
+<script type="text/javascript">
+    var submitBTN = document.getElementById("cdn_update");
+    submitBTN.onclick = function (event) {
+        // 注意这里是 onclick 函数
+        console.log("click");
+
+        $.ajax({
+            url: "/update-cdn",
+            type: "POST",
+            data: null,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data);
+
+                if (data.code !== 0) {
+                    alert('更新失败')
+                } else {
+                    new_str = "更新cdn结果： " + data.res
+                    $("#cdn_content").val(new_str);
+                    alert('更新资源成功！')
+
+                }
+            },
+            fail: function (data) {
+                alert("更新失败!");
+            }
+        })
+
+    }
 </script>
 
 </html>
