@@ -155,6 +155,7 @@ web.json
 log/
 configure/
 release/
+upload/
 *.exe
 *.png
 *.jpg
