@@ -169,6 +169,12 @@
             <button id="url_update">更新URL资源 site 1 </button>
             <input id="txt_content" type="text" value="" class="url_input">
         </div>
+
+        <div class="wrapper">
+            <button id="url_update_www">更新URL资源 site 1 （www） </button>
+            <input id="txt_content_www" type="text" value="" class="url_input">
+        </div>
+
         <div class="wrapper">
             <button id="url_update2">更新URL资源 site 2 </button>
             <input id="txt_content2" type="text" value="" class="url_input">
@@ -205,10 +211,9 @@
         $.ajax({
             url: "/update-site1",
             type: "POST",
-            data: null,
+            data: {value:1},
             cache: false,
-            processData: false,
-            contentType: false,
+            contentType: "application/x-www-form-urlencoded",
             success: function (data) {
                 console.log(data);
 
@@ -223,7 +228,37 @@
             fail: function (data) {
                 alert("更新失败!");
             }
-        })
+        });
+
+
+
+    }
+    var submitBTNwww = document.getElementById("url_update_www");
+
+    submitBTNwww.onclick = function (event) {
+        // 注意这里是 onclick 函数
+        console.log("click");
+        $.ajax({
+            url: "/update-site1",
+            type: "POST",
+            data: {value:2},
+            cache: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function (data) {
+                console.log(data);
+
+                if (data.code !== 0) {
+                    alert('更新失败')
+                } else {
+                    new_str = data.res + " " + data.count
+                    $("#txt_content_www").val(new_str);
+                    alert('更新资源成功！')
+                }
+            },
+            fail: function (data) {
+                alert("更新失败!");
+            }
+        });
 
     }
 

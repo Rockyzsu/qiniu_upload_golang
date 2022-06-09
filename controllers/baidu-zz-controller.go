@@ -1,21 +1,36 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"qiniu/webmaster"
+	"strconv"
 )
 
 // 百度站长
 
 func BaiduSite1(ctx *gin.Context) {
+	if ctx.Request.Method == "POST" {
 
-	res, count := webmaster.PushProcess(1)
-	ctx.JSON(http.StatusOK, gin.H{
-		"code":  0,
-		"res":   res,
-		"count": count,
-	})
+		value := ctx.PostForm("value")
+		fmt.Println("current is ", value)
+		int_value, err := strconv.Atoi(value)
+		if err != nil {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":  1,
+				"res":   "",
+				"count": 0,
+			})
+			return
+		}
+		res, count := webmaster.PushProcess(1, int_value)
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":  0,
+			"res":   res,
+			"count": count,
+		})
+	}
 }
 
 func BaiduSite2(ctx *gin.Context) {
