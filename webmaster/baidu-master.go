@@ -23,19 +23,13 @@ func ParseBD(html string) []string {
 	nodes := xpath.NodeList(doc.Find(`//div[@class="aw-common-list"]/div[@class="aw-item article"]`))
 
 	var articles []string
-	//fmt.Println("articles string array")
-	//fmt.Println(articles)
-	//fmt.Println(len(nodes))
+
 	for i := 0; i < len(nodes); i++ {
-		fmt.Println(xpath.String(nodes[i].Find(`.//div/h4/a/@href`)))
 		urlDetail := xpath.String(nodes[i].Find(`.//div/h4/a/@href`))
 
 		articles = append(articles, urlDetail)
 	}
-	//fmt.Println("Articles ")
-	//fmt.Println(articles)
-	//fmt.Println("Len of article")
-	//fmt.Println(len(articles))
+
 	return articles
 }
 
@@ -57,15 +51,12 @@ func PushBaidu(urlList []string, status int) (bool, int) {
 		fmt.Println("参数出错")
 		return false, 0
 	}
-	fmt.Println(BD_URL)
 	for _, url := range urlList {
 		var res *Response
-		fmt.Println(url)
 		if status == 2 {
 			url = strings.Replace(url, "http://", "http://www.", -1)
 		}
-		fmt.Println(url)
-		fmt.Println(" ")
+
 		_, err := client.R().
 			SetHeader("Content-Type", "text/plain").
 			SetHeader("Host", "data.zz.baidu.com").
@@ -81,7 +72,6 @@ func PushBaidu(urlList []string, status int) (bool, int) {
 		last_remain = res.Remain
 
 	}
-	fmt.Println(last_remain)
 	return true, last_remain
 }
 

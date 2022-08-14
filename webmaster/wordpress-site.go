@@ -22,9 +22,7 @@ func parseWP(html string) []string {
 	nodes := xpath.NodeList(doc.Find(`//div[@class="content"]/article`))
 
 	var articles []string
-	fmt.Println(len(nodes))
 	for i := 0; i < len(nodes); i++ {
-		fmt.Println(xpath.String(nodes[i].Find(`.//header/h2/a/@href`)))
 		urlDetail := xpath.String(nodes[i].Find(`.//header/h2/a/@href`))
 		articles = append(articles, urlDetail)
 	}
@@ -59,7 +57,6 @@ func _PushWP(urlList []string) (bool, int) {
 		last_remain = res.Remain
 
 	}
-	fmt.Println(last_remain)
 	return true, last_remain
 }
 

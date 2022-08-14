@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auth</title>
+    <link rel='stylesheet' href='//cdn.bootcss.com/normalize/5.0.0/normalize.min.css'>
+    <script src="//cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+</head>
+
+<body>
+
+
+<div class="wrapper">
+    <h5>输入密码：</h5><input type="password" id="pwd" name="pwd">
+    <button id="refresh" >加载</button>
+</div>
+
+<div id="content">
+    <div>
+        <p>最多显示上传历史记录 50条</p>
+
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>URL</th>
+                <th>Updated</th>
+            </tr>
+
+            {{ range $v := .history}}
+            <tr>
+                <td>{{ $v.Id }}</td>
+                <td><a href="{{$v.Url}}">{{ $v.Url }}</a></td>
+                <td><img src="{{$v.Url}}" height="200" width="200"></td>
+                <td>{{ $v.Updated }}</td>
+            </tr>
+            {{ end }}
+
+
+        </table>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    var submitBTN = document.getElementById("refresh");
+    submitBTN.onclick = function (event) {
+        // 注意这里是 onclick 函数
+        console.log("click");
+        var pwd = $("#pwd").val();
+        // console.log(formData);
+
+        $.ajax({
+            url: "/auth",
+            type: "POST",
+            data: {"password": pwd},
+            contentType: "application/x-www-form-urlencoded",
+            success: function (data) {
+                console.log(data);
+                var hist = data.history;
+                console.log(hist);
+
+            },
+            fail: function (data) {
+                alert("上传失败");
+                console.log("上传失败");
+            }
+        })
+
+    }
+</script>
+
+</body>
+</html>

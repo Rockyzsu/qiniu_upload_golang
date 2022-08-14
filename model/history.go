@@ -1,9 +1,9 @@
 package model
 
 type History struct {
-	Id        int    `json:"Id"`
-	Url       string `json:"Url"`
-	Updated   string `json:"Updated"`
+	Id        int    `json:"id"`
+	Url       string `json:"url"`
+	Updated   string `json:"updated"`
 	IsDeleted bool   `json:"isDeleted"`
 }
 

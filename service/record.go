@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"log"
 	"qiniu/model"
 	"time"
@@ -31,9 +32,9 @@ func InsertImageRecord(url string) bool {
 
 type HIST []model.History
 
-func GetImageRecord() HIST {
+func GetImageRecord(count int) HIST {
 
-	rows, err := DB.Query("select id,url,updated from tb_image_upload where isDeleted=0 order by id desc limit 50")
+	rows, err := DB.Query(fmt.Sprintf("select id,url,updated from tb_image_upload where isDeleted=0 order by id desc limit %d", count))
 	if err != nil {
 		log.Println("查询url失败")
 		log.Fatal(err)
@@ -56,8 +57,8 @@ func GetImageRecord() HIST {
 
 type TEXTList []model.ContentText
 
-func GetTextHistory() TEXTList {
-	rows, err := DB.Query("select id,text,updated from tb_content order by id desc limit 5")
+func GetTextHistory(count int) TEXTList {
+	rows, err := DB.Query(fmt.Sprintf("select id,text,updated from tb_content order by id desc limit %d", count))
 	if err != nil {
 		log.Println("查询text失败")
 	}

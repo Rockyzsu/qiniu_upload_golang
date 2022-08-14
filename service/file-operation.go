@@ -116,13 +116,10 @@ func (this *QiniuFileInfo) Exist(filename string) bool {
 
 func (this *QiniuFileInfo) Delete(url string) error {
 	this.init()
-	//fmt.Println("space", this.user.space)
 
-	//fmt.Println(url)
 	url = strings.Trim(url, "")
 	string_list := strings.Split(url, this.user.space)
-	//fmt.Println(string_list)
-	//fmt.Println(len(string_list))
+
 	if len(string_list) != 2 {
 		return fmt.Errorf("%s", "input url error")
 	}
@@ -145,7 +142,6 @@ func (this *QiniuFileInfo) Walk() []string {
 	this.init()
 	bucketManager := storage.NewBucketManager(this.mac, &this.cfg)
 
-	fmt.Println("\nStart walk\n")
 	limit := 1000
 	prefix_list := []string{"picgo", "sharex", "typora", "upic", "uploadas", "webupload"}
 	delimiter := ""

@@ -5,7 +5,9 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <link rel='stylesheet' href='//cdn.bootcss.com/normalize/5.0.0/normalize.min.css'>
-    <title>上传记录</title>
+    <title>复制</title>
+    <script src="//cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+
     <style type="text/css">
         table {
             border-collapse: collapse;
@@ -32,33 +34,82 @@
             background: #F5FAFA;
         }
     </style>
+    <script type="text/javascript">
+        //显示详细信息
+
+        function showtable(){
+
+            console.log("click");
+            var pwd = $("#pwd").val();
+            var count = $("#count").val();
+
+            $.ajax({
+                url: "/paste",
+                type: "POST",
+                data: {"password": pwd,"count":count},
+                contentType: "application/x-www-form-urlencoded",
+                success: function (data) {
+
+
+                    var add = $(".add");
+                    add.empty();
+                    //创建表
+                    var table = document.createElement("table");
+                    //利用bootstrap给表增加样式
+                    table.classList = "table table-hover table-striped"
+                    //创建首行表头
+                    var tableHead = table.insertRow(0);
+                    //首行添加内容
+                    tableHead.insertCell(0).innerHTML = "序号";
+                    tableHead.insertCell(1).innerHTML = "内容";
+                    tableHead.insertCell(2).innerHTML = "时间";
+
+
+                    //表加进div容器
+                    add.append(table);
+                    //表内容
+                    var ret_data =data.ret_data
+                for (let i = 0; i < ret_data.length; i++) {
+                        console.log(ret_data[i])
+                        let tr = table.insertRow(i + 1);//第二行开始
+                        //行内容
+                        tr.insertCell(0).innerHTML = ret_data[i].id;
+                        tr.insertCell(1).innerHTML = ret_data[i].text;
+                        tr.insertCell(2).innerHTML = ret_data[i].updated;
+
+                    }
+
+                },
+                fail: function (data) {
+                    var add = $(".add");
+                    add.empty();
+                    console.log("上传失败");
+                }
+            })
+
+            console.log('done');
+        }
+    </script>
 
 </head>
 <body>
 
 
 <div align="center">
-    <p>最多显示上传文本记录 5条</p>
     <br>
     <button id="back_bt">返回复制</button>
     <br>
     <br>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Content</th>
-            <th>Updated</th>
-        </tr>
+    <div>
+        <p>输入密码：<input type="password" id="pwd" name="pwd"> 数量:<input type="text" id="count" name="count" value="10"><button type="button" class="list_bt" onclick="showtable()">查询</button></p>
+        <div class="add"></div>
 
-        {{ range $v := .texts}}
-        <tr>
-            <td>{{ $v.Id }}</td>
-            <td>{{ $v.Text }}</td>
-            <td>{{ $v.Updated }}</td>
-        </tr>
-        {{ end }}
+        <table id='EmoplyList'>
 
-    </table>
+        </table>
+
+    </div>
+
 
 </div>
 <script type="text/javascript">

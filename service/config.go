@@ -47,8 +47,7 @@ func NewTencentUserInfo() *TencentUserInfo {
 const SOURCE = "webupload"
 
 func NewUserInfo() *UserInfo {
-	//print("space name")
-	//print(os.Getenv("qiniu_space"))
+
 	return &UserInfo{
 		accessKey: os.Getenv("qiniu_access_key"),
 		secretKey: os.Getenv("qiniu_secret_key"),
@@ -58,11 +57,13 @@ func NewUserInfo() *UserInfo {
 }
 
 type MysqlDB struct {
-	Username string
-	Password string
-	Host     string
-	Port     int
-	Db       string
+	Username     string
+	Password     string
+	Host         string
+	Port         int
+	Db           string
+	HttpPort     int
+	AuthPassword string
 }
 
 func JsonParse(filename string) (MysqlDB, error) {
@@ -81,6 +82,8 @@ func JsonParse(filename string) (MysqlDB, error) {
 }
 
 var DB *sql.DB
+var Port int
+var AuthPassword string
 
 func init() {
 	//json读取数据
@@ -91,6 +94,9 @@ func init() {
 		log.Fatalln("请创建server/config.json 配置文件")
 	}
 	DB = conf.InitDB()
+	Port = conf.HttpPort
+	AuthPassword = conf.AuthPassword
+
 }
 
 func (this *MysqlDB) InitDB() *sql.DB {

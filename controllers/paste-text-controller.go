@@ -1,20 +1,47 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"qiniu/service"
+	"strconv"
 	"strings"
 )
 
 //上传记录
 func ListHistory(ctx *gin.Context) {
-	hist := service.GetImageRecord()
-	ctx.HTML(http.StatusOK, "imageList.html", gin.H{"history": hist})
+	if ctx.Request.Method == "GET" {
+		ctx.HTML(http.StatusOK, "imageList.html", nil)
+	} else {
+		pwd := ctx.PostForm("password")
+		count := ctx.PostForm("count")
+		if pwd == service.AuthPassword {
+			count_int, err := strconv.Atoi(count)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"ret_data": nil,
+				})
+				return
+			}
+			hist := service.GetImageRecord(count_int)
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"ret_data": hist,
+			})
+
+		} else {
+			fmt.Println("error")
+			ctx.JSON(http.StatusOK, gin.H{
+				"ret_data": nil,
+			})
+		}
+
+	}
 }
 
 func ListHistorys(ctx *gin.Context) {
-	hist := service.GetImageRecord()
+	hist := service.GetImageRecord(50)
 	ctx.HTML(http.StatusOK, "images.html", gin.H{"history": hist})
 }
 
@@ -39,6 +66,29 @@ func HandlerCopyContent(ctx *gin.Context) {
 //临时粘贴板
 func GetHistoryText(ctx *gin.Context) {
 	//　获取历史记录
-	ret := service.GetTextHistory()
-	ctx.HTML(http.StatusOK, "listtext.html", gin.H{"texts": ret})
+	if ctx.Request.Method == "GET" {
+		ctx.HTML(http.StatusOK, "listtext.html", nil)
+	} else {
+		pwd := ctx.PostForm("password")
+		count := ctx.PostForm("count")
+		if pwd == service.AuthPassword {
+			count_int, err := strconv.Atoi(count)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"ret_data": nil,
+				})
+				return
+			}
+			ret := service.GetTextHistory(count_int)
+			ctx.JSON(http.StatusOK, gin.H{
+				"ret_data": ret,
+			})
+
+		} else {
+			fmt.Println("error")
+			ctx.JSON(http.StatusOK, gin.H{
+				"ret_data": nil,
+			})
+		}
+	}
 }

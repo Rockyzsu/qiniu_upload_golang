@@ -10,12 +10,14 @@
 package main
 
 import (
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"qiniu/router"
+	"qiniu/service"
 )
 
 func main() {
 	routerObj := router.Router()
-	log.Fatalln(routerObj.Run("127.0.0.1:8080"))
+	log.Fatalln(routerObj.Run(fmt.Sprintf("0.0.0.0:%d", service.Port)))
 }
