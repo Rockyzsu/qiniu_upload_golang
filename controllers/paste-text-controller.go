@@ -10,7 +10,7 @@ import (
 )
 
 //上传记录
-func ListHistory(ctx *gin.Context) {
+func ListImageHistory(ctx *gin.Context) {
 	if ctx.Request.Method == "GET" {
 		ctx.HTML(http.StatusOK, "imageList.html", nil)
 	} else {
@@ -21,6 +21,7 @@ func ListHistory(ctx *gin.Context) {
 			if err != nil {
 				ctx.JSON(http.StatusBadRequest, gin.H{
 					"ret_data": nil,
+					"status":   0,
 				})
 				return
 			}
@@ -28,12 +29,14 @@ func ListHistory(ctx *gin.Context) {
 
 			ctx.JSON(http.StatusOK, gin.H{
 				"ret_data": hist,
+				"status":   1,
 			})
 
 		} else {
 			fmt.Println("error")
 			ctx.JSON(http.StatusOK, gin.H{
 				"ret_data": nil,
+				"status":   0,
 			})
 		}
 

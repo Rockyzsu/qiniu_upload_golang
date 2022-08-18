@@ -7,8 +7,7 @@ import (
 )
 
 func TestConfig(t *testing.T) {
-	//v:=MysqlDB{}
-	//fmt.Println(v)
+
 	fmt.Println(os.Getwd())
 	conf, err := JsonParse("config.json")
 	if err != nil {

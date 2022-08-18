@@ -22,10 +22,10 @@ func Router() *gin.Engine {
 	router.GET("/", controllers.Index)
 	router.POST("/", controllers.UploadPage) //上传
 
-	router.GET("/list", controllers.ListHistory)  //显示url
-	router.POST("/list", controllers.ListHistory) //显示url
-	router.GET("/l", controllers.ListHistory)     //快捷方式
-	router.POST("/l", controllers.ListHistory)    //快捷方式
+	router.GET("/list", controllers.ListImageHistory)  //显示url
+	router.POST("/list", controllers.ListImageHistory) //显示url
+	router.GET("/l", controllers.ListImageHistory)     //快捷方式
+	router.POST("/l", controllers.ListImageHistory)    //快捷方式
 
 	router.GET("/ll", controllers.ListHistorys) //快捷方式
 	// 文本

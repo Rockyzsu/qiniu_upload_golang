@@ -51,6 +51,7 @@
                     var add = $(".add");
                     add.empty();
                     //创建表
+                    if (data.status===1){
                     var table = document.createElement("table");
                     //利用bootstrap给表增加样式
                     table.classList = "table table-hover table-striped"
@@ -67,20 +68,28 @@
                     //表内容
                     var ret_data =data.ret_data
                     for (let i = 0; i < ret_data.length; i++) {
-                        console.log(ret_data[i])
+                        // console.log(ret_data[i])
                         let tr = table.insertRow(i + 1);//第二行开始
                         //行内容
                         tr.insertCell(0).innerHTML = ret_data[i].id;
-                        tr.insertCell(1).innerHTML = ret_data[i].url;
+                        u=ret_data[i].url;
+                        tr.insertCell(1).innerHTML = "<td><a href=\""+u+"\" target=\"_blank\">"+u+"</td>";
                         tr.insertCell(2).innerHTML = ret_data[i].updated;
 
                     }
 
-                },
+                }
+                else{
+                        var add = $(".add");
+                        add.empty();
+                        alert("密码错误");
+                }}
+                    ,
                 fail: function (data) {
                     var add = $(".add");
                     add.empty();
-                    console.log("上传失败");
+                    alert("密码错误")
+                    // console.log("上传失败");
                 }
             })
 
@@ -115,27 +124,5 @@
 
     }
 </script>
-<!--<div>-->
 
-
-<!--    <table border="1">-->
-<!--        <tr>-->
-<!--            <th>ID</th>-->
-<!--            <th>URL</th>-->
-<!--            <th>Updated</th>-->
-<!--        </tr>-->
-
-<!--        {{ range $v := .history}}-->
-<!--        <tr>-->
-<!--            <td>{{ $v.Id }}</td>-->
-<!--            <td><a href="{{$v.Url}}">{{ $v.Url }}</a></td>-->
-<!--            <td><img src="{{$v.Url}}" height="200" width="200"></td>-->
-<!--            <td>{{ $v.Updated }}</td>-->
-<!--        </tr>-->
-<!--        {{ end }}-->
-
-
-<!--    </table>-->
-
-<!--</div>-->
 </body>
