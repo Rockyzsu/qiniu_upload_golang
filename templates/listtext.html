@@ -12,19 +12,20 @@
         table {
             border-collapse: collapse;
             margin: 0 auto;
-            text-align: center;
+            text-align: left;
         }
 
         table td, table th {
             border: 1px solid #cad9ea;
             color: #666;
             height: 60px;
+            width: 20px;
         }
 
-        table thead th {
-            background-color: #CCE8EB;
-            width: 400px;
-        }
+        /*table thead th {*/
+        /*    background-color: #CCE8EB;*/
+        /*    width: 400px;*/
+        /*}*/
 
         table tr:nth-child(odd) {
             background: #fff;
@@ -36,8 +37,28 @@
     </style>
     <script type="text/javascript">
         //显示详细信息
+        // 复制的方法
+        function copyText(text) { // text: 要复制的内容， callback: 回调
+            var tag = document.createElement('input');
+            tag.setAttribute('id', 'cp_hgz_input');
+            tag.value = text;
+            document.getElementsByTagName('body')[0].appendChild(tag);
+            document.getElementById('cp_hgz_input').select();
+            document.execCommand('copy');
+            document.getElementById('cp_hgz_input').remove();
+            alert('复制成功');
+        }
 
-        function showtable(){
+
+        function copyline(ths) {
+            var prev = $(ths).parent().prevAll()
+            var txt = $(prev[1]).text();
+            copyText(txt);
+
+
+        }
+
+        function showtable() {
 
             console.log("click");
             var pwd = $("#pwd").val();
@@ -46,11 +67,11 @@
             $.ajax({
                 url: "/paste",
                 type: "POST",
-                data: {"password": pwd,"count":count},
+                data: {"password": pwd, "count": count},
                 contentType: "application/x-www-form-urlencoded",
                 success: function (data) {
 
-
+                    console.log(data);
                     var add = $(".add");
                     add.empty();
                     //创建表
@@ -61,21 +82,27 @@
                     var tableHead = table.insertRow(0);
                     //首行添加内容
                     tableHead.insertCell(0).innerHTML = "序号";
-                    tableHead.insertCell(1).innerHTML = "内容";
-                    tableHead.insertCell(2).innerHTML = "时间";
+                    tableHead.insertCell(1).innerHTML = "操作";
+
+                    tableHead.insertCell(2).innerHTML = "内容";
+                    tableHead.insertCell(3).innerHTML = "时间";
 
 
                     //表加进div容器
                     add.append(table);
                     //表内容
-                    var ret_data =data.ret_data
-                for (let i = 0; i < ret_data.length; i++) {
-                        console.log(ret_data[i])
+                    var ret_data = data.ret_data
+                    for (let i = 0; i < ret_data.length; i++) {
                         let tr = table.insertRow(i + 1);//第二行开始
                         //行内容
                         tr.insertCell(0).innerHTML = ret_data[i].id;
-                        tr.insertCell(1).innerHTML = ret_data[i].text;
-                        tr.insertCell(2).innerHTML = ret_data[i].updated;
+
+                        var t = '<a onclick="copyline(this)">复制</a>';
+                        console.log(t);
+                        tr.insertCell(1).innerHTML = t;
+                        tr.insertCell(2).innerHTML = ret_data[i].text;
+                        tr.insertCell(3).innerHTML = ret_data[i].updated;
+
 
                     }
 
@@ -101,7 +128,10 @@
     <br>
     <br>
     <div>
-        <p>输入密码：<input type="password" id="pwd" name="pwd"> 数量:<input type="text" id="count" name="count" value="10"><button type="button" class="list_bt" onclick="showtable()">查询</button></p>
+        <p>输入密码：<input type="password" id="pwd" name="pwd"> 数量:<input type="text" id="count" name="count"
+                                                                            value="10">
+            <button type="button" class="list_bt" onclick="showtable()">查询</button>
+        </p>
         <div class="add"></div>
 
         <table id='EmoplyList'>
@@ -116,7 +146,7 @@
     var submitBTN = document.getElementById("back_bt");
 
     submitBTN.onclick = function (event) {
-        window.location.href="/copy";
+        window.location.href = "/copy";
 
     }
 </script>
