@@ -7,6 +7,7 @@
     <link rel='stylesheet' href='//cdn.bootcss.com/normalize/5.0.0/normalize.min.css'>
     <title>复制</title>
     <script src="//cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 
     <style type="text/css">
         table {
@@ -58,6 +59,21 @@
 
         }
 
+        function copyEvent(ths) {
+            var prev = $(ths).parent().prevAll()
+            var num = $(prev[0]).text();
+
+            var clipboard = new ClipboardJS('.item_'+num);
+            clipboard.on('success', function(e) {
+                alert('复制成功');
+                e.clearSelection();
+            });
+
+            console.log('work')
+        }
+
+
+
         function showtable() {
 
             console.log("click");
@@ -96,11 +112,15 @@
                         let tr = table.insertRow(i + 1);//第二行开始
                         //行内容
                         tr.insertCell(0).innerHTML = ret_data[i].id;
-
-                        var t = '<a onclick="copyline(this)">复制</a>';
+                        var txt = ret_data[i].text;
+                        var txt_esc = escape(txt);
+                        var num = ret_data[i].id;
+                        // console.log(typeof(txt));
+                        // var t = '<a data-clipboard-text="'+txt+' " class="'+'item_'+i+'" onclick="copyEvent(this)">复制</a>';
+                        var t = `<a data-clipboard-text=\"${txt}\" class="item_${num}" onclick="copyEvent(this)">复制</a>`;
                         console.log(t);
                         tr.insertCell(1).innerHTML = t;
-                        tr.insertCell(2).innerHTML = ret_data[i].text;
+                        tr.insertCell(2).innerHTML = txt;
                         tr.insertCell(3).innerHTML = ret_data[i].updated;
 
 
@@ -142,6 +162,8 @@
 
 
 </div>
+
+
 <script type="text/javascript">
     var submitBTN = document.getElementById("back_bt");
 
