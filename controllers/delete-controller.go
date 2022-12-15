@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"qiniu/service"
@@ -26,20 +27,27 @@ func DeleteImage(ctx *gin.Context) {
 	}
 }
 
-func DeleteImageByBT(ctx *gin.Context) {
+func DeleteImageById(ctx *gin.Context) {
 	// 按钮删除图片
 	if ctx.Request.Method == "POST" {
 
-		url := ctx.PostForm("identifier")
-		//fmt.Println(url)
+		id := ctx.PostForm("id")
+		fmt.Println(id)
 		var status int
 
-		ret := service.DeleteImage(url)
+		url, ret := service.DeleteImageRecordById(id)
 		if ret {
 			status = 1
 		}
-		service.DeleteImageRecord(url)
-		ctx.JSON(http.StatusOK, gin.H{"data": status, "status": "great"})
+		fmt.Println(url)
+		//service.DeleteImageRecord(url)
+		ret = service.DeleteImage(url)
+		if ret {
+			ctx.JSON(http.StatusOK, gin.H{"data": status, "status": 1})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"data": status, "status": 0})
+
+		}
 		return
 	}
 }

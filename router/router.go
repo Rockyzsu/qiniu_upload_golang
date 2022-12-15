@@ -24,8 +24,14 @@ func Router() *gin.Engine {
 
 	router.GET("/list", controllers.ListImageHistory)  //显示url
 	router.POST("/list", controllers.ListImageHistory) //显示url
-	router.GET("/l", controllers.ListImageHistory)     //快捷方式
-	router.POST("/l", controllers.ListImageHistory)    //快捷方式
+
+	router.GET("/l", controllers.ListImageHistory)  //快捷方式
+	router.POST("/l", controllers.ListImageHistory) //快捷方式
+
+	router.GET("/l2", controllers.ListImageHistoryV2)        //快捷方式
+	router.POST("/l2", controllers.ListImageHistoryV2)       //快捷方式
+	router.GET("/jump", controllers.ListImageHistoryPageV2)  //快捷方式
+	router.POST("/jump", controllers.ListImageHistoryPageV2) //快捷方式
 
 	router.GET("/ll", controllers.ListHistorys) //快捷方式
 	// 文本
@@ -40,7 +46,7 @@ func Router() *gin.Engine {
 	//删除 需要权限
 	router.GET("/d", controllers.DeleteImage) // 删除
 	router.POST("/delimage", controllers.DeleteImage)
-	router.POST("/image/remove", controllers.DeleteImageByBT)
+	router.POST("/image/remove_id", controllers.DeleteImageById)
 
 	// 获取所有图片
 	router.GET("/w", controllers.WalkImages)
@@ -56,6 +62,7 @@ func Router() *gin.Engine {
 
 	// 测试用
 	router.GET("/node", controllers.DynamicAddNode)
+	router.GET("/count", controllers.CountInterface)
 
 	return router
 }

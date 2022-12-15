@@ -55,6 +55,38 @@ func GetImageRecord(count int) HIST {
 	return hist
 }
 
+func TotalCount() int {
+	var count int
+	err := DB.QueryRow("select count(*) from tb_image_upload where isDeleted=0").Scan(&count)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return count
+}
+
+func GetImageRecordByIndex(page int, count int) HIST {
+	//根据索引跳转，分页
+	rows, err := DB.Query(fmt.Sprintf("select id,url,updated from tb_image_upload where isDeleted=0 order by id desc limit %d,%d", (page - count), count))
+	if err != nil {
+		log.Println("查询url失败")
+		log.Fatal(err)
+	}
+
+	var hist HIST
+
+	for rows.Next() {
+
+		var h model.History
+		err = rows.Scan(&h.Id, &h.Url, &h.Updated)
+		if err != nil {
+			log.Println("读取url数据出错")
+		}
+		hist = append(hist, h)
+
+	}
+	return hist
+}
+
 type TEXTList []model.ContentText
 
 func GetTextHistory(count int) TEXTList {
@@ -119,4 +151,25 @@ func DeleteImageRecord(url string) bool {
 	} else {
 		return false
 	}
+}
+
+func DeleteImageRecordById(id string) (string, bool) {
+	//删除图片后把状态修改
+	cursor, err := DB.Prepare("update tb_image_upload set isDeleted=true where id=?")
+	if err != nil {
+		log.Println(err)
+		return "", false
+	}
+	defer cursor.Close()
+	_, err = cursor.Exec(id)
+
+	var imgItem model.History
+	err = DB.QueryRow("select url from tb_image_upload where id=?", id).Scan(&imgItem.Url)
+
+	if err != nil {
+		log.Println(err)
+		return "", false
+	}
+	fmt.Println(imgItem.Url)
+	return imgItem.Url, true
 }

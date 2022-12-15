@@ -9,45 +9,6 @@ import (
 	"strings"
 )
 
-//上传记录
-func ListImageHistory(ctx *gin.Context) {
-	if ctx.Request.Method == "GET" {
-		ctx.HTML(http.StatusOK, "imageList.html", nil)
-	} else {
-		pwd := ctx.PostForm("password")
-		count := ctx.PostForm("count")
-		if pwd == service.AuthPassword {
-			count_int, err := strconv.Atoi(count)
-			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{
-					"ret_data": nil,
-					"status":   0,
-				})
-				return
-			}
-			hist := service.GetImageRecord(count_int)
-
-			ctx.JSON(http.StatusOK, gin.H{
-				"ret_data": hist,
-				"status":   1,
-			})
-
-		} else {
-			fmt.Println("error")
-			ctx.JSON(http.StatusOK, gin.H{
-				"ret_data": nil,
-				"status":   0,
-			})
-		}
-
-	}
-}
-
-func ListHistorys(ctx *gin.Context) {
-	hist := service.GetImageRecord(50)
-	ctx.HTML(http.StatusOK, "images.html", gin.H{"history": hist})
-}
-
 //临时粘贴板
 func CopyTextIndex(ctx *gin.Context) {
 	//上传　前台
