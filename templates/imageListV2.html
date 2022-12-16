@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>图片预览</title>
+    <script src="//cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+    <style type="text/css">
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        table td, table th {
+            border: 1px solid #cad9ea;
+            color: #666;
+            height: 60px;
+        }
+
+        table thead th {
+            background-color: #CCE8EB;
+            width: 400px;
+        }
+
+        table tr:nth-child(odd) {
+            background: #fff;
+        }
+
+        table tr:nth-child(even) {
+            background: #F5FAFA;
+        }
+    </style>
+    <script type="text/javascript">
+        //显示详细信息
+        function deleteImage(id) {
+            console.log('删除id' + id);
+            $.ajax({
+                url: "/image/remove_id",
+                type: "POST",
+                data: {"id": id},
+                contentType: "application/x-www-form-urlencoded",
+                success: function (data) {
+
+                    var add = $(".add");
+                    add.empty();
+                    //创建表
+                    if (data.status === 1) {
+                        // showtable();
+                        navPage();
+
+                    } else {
+                        var add = $(".add");
+                        add.empty();
+                        alert("密码错误");
+                    }
+                }
+                ,
+                fail: function (data) {
+                    var add = $(".add");
+                    add.empty();
+                    alert("密码错误")
+                    // console.log("上传失败");
+                }
+            })
+
+            console.log('done');
+
+        }
+
+
+        function getImageInfo(page, pageSize, password) {
+            console.log(page);
+            console.log(pageSize);
+            $.ajax({
+                url: "/jump",
+                type: "POST",
+                data: {"page": page, "count": pageSize, "password": password},
+                contentType: "application/x-www-form-urlencoded",
+                success: function (data) {
+
+                    var add = $(".add");
+                    add.empty();
+                    //创建表
+                    if (data.status === 1) {
+                        console.log(data.current_page)
+                        $('#page').val(data.current_page)
+
+                        var total = data.total_count
+                        total_page = parseInt(total / pageSize)
+                        $('#total_page').text(total_page)
+                        $('#total_count').text(total)
+
+                        var table = document.createElement("table");
+                        //利用bootstrap给表增加样式
+                        table.classList = "table table-hover table-striped"
+                        //创建首行表头
+                        var tableHead = table.insertRow(0);
+                        //首行添加内容
+                        tableHead.insertCell(0).innerHTML = "序号";
+                        tableHead.insertCell(1).innerHTML = "内容";
+                        tableHead.insertCell(2).innerHTML = "预览";
+                        tableHead.insertCell(3).innerHTML = "操作";
+
+
+                        //表加进div容器
+                        add.append(table);
+                        //表内容
+                        var ret_data = data.ret_data
+                        for (let i = 0; i < ret_data.length; i++) {
+                            // console.log(ret_data[i])
+                            let tr = table.insertRow(i + 1);//第二行开始
+                            //行内容
+                            id = ret_data[i].id
+                            tr.insertCell(0).innerHTML = id;
+                            u = ret_data[i].url;
+                            tr.insertCell(1).innerHTML = "<td><a href=\"" + u + "\" target=\"_blank\">" + u + "</td>";
+                            tr.insertCell(2).innerHTML = "<td><img src=\"" + u + "\" width='400' ></td>";
+                            // tr.insertCell(3).innerHTML = "<td><button onclick='deleteImage("+id+")' style='height: 20px;width: 30px'>删除</button></td>";
+                            tr.insertCell(3).innerHTML = "<td><button onclick='deleteImage(" + id + ")'>删除</button></td>";
+
+                        }
+
+                    } else if (data.status==-1){
+                        alert("最后一页了");
+
+                    } else {
+                        var add = $(".add");
+                        add.empty();
+                        alert("密码错误");
+                    }
+                }
+                ,
+                fail: function (data) {
+                    var add = $(".add");
+                    add.empty();
+                    alert("密码错误")
+                    // console.log("上传失败");
+                }
+            })
+
+            console.log('end')
+        }
+
+        function navPage() {
+            //倒序处理 第一页 的对应最后一条
+            console.log('call')
+            var page = $("#page").val();
+            var pageSize = $("#count").val();
+            var password = $("#pwd").val();
+            getImageInfo(page, pageSize, password)
+
+        }
+
+        function prePage() {
+            console.log('prePage')
+            var page = parseInt($("#page").val()) - 1;
+            if (page<=0){
+                alert('没有上一页了')
+                return
+            }
+            var pageSize = $("#count").val();
+            var password = $("#pwd  ").val();
+            console.log(page);
+            console.log(pageSize);
+            getImageInfo(page, pageSize, password)
+        }
+
+        function nextPage() {
+            console.log('prePage')
+            var page = parseInt($("#page").val()) + 1;
+            var pageSize = $("#count").val();
+            var password = $("#pwd").val();
+            console.log(page);
+            console.log(pageSize);
+            getImageInfo(page, pageSize, password)
+        }
+    </script>
+</head>
+<body>
+
+<div align="center">
+    <br>
+    <button id="back_bt">返回首页</button>
+    <br>
+    <br>
+    <div>
+        <p>输入密码：<input type="password" id="pwd" name="pwd"> 图片数量:<input type="text" id="count" name="count"
+                                                                                value="10">
+            <button type="button" class="list_bt" onclick="navPage()">查询</button>
+        </p>
+        <div class="nextBtn">
+            <button onclick="prePage()">上一页</button>
+            <button onclick="nextPage()">下一页</button>
+            <label>第<input type="text" style="width: 20px" id="page">页/共 <span id="total_page"></span>页 共<span
+                    id="total_count">   </span>条
+                <button onclick="navPage()">跳转</button>
+            </label>
+        </div>
+        <div class="add"></div>
+
+        <table id='EmployList'>
+
+        </table>
+
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    var submitBTN = document.getElementById("back_bt");
+
+    submitBTN.onclick = function (event) {
+        window.location.href = "/";
+
+    }
+</script>
+
+</body>

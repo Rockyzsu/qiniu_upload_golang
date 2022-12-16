@@ -102,11 +102,8 @@ func (this *QiniuFileInfo) Exist(filename string) bool {
 	bucketManager := storage.NewBucketManager(this.mac, &this.cfg)
 	_, sErr := bucketManager.Stat(this.user.bucket, SOURCE+"/"+filename)
 	if sErr != nil {
-		//fmt.Println(sErr)
 		return false
 	} else {
-		//fmt.Println(fileInfo)
-		//fmt.Println(fileInfo.String())
 		//可以解析文件的PutTime
 		//fmt.Println(storage.ParsePutTime(fileInfo.PutTime))
 		return true

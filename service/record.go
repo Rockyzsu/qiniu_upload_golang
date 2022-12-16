@@ -64,9 +64,9 @@ func TotalCount() int {
 	return count
 }
 
-func GetImageRecordByIndex(page int, count int) HIST {
+func GetImageRecordByCount(startCount int, count int) HIST {
 	//根据索引跳转，分页
-	rows, err := DB.Query(fmt.Sprintf("select id,url,updated from tb_image_upload where isDeleted=0 order by id desc limit %d,%d", (page - count), count))
+	rows, err := DB.Query(fmt.Sprintf("select id,url,updated from tb_image_upload where isDeleted=0 order by id asc limit %d,%d", (startCount-count)+1, count))
 	if err != nil {
 		log.Println("查询url失败")
 		log.Fatal(err)

@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <title>图片链接</title>
-    <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
     <style type="text/css">
         table {
             border-collapse: collapse;
@@ -52,6 +52,9 @@
                     add.empty();
                     //创建表
                     if (data.status===1){
+                        var total = data.total_count
+                        total_page = parseInt(total/count)
+                        $('#total_page').val(total_page)
                     var table = document.createElement("table");
                     //利用bootstrap给表增加样式
                     table.classList = "table table-hover table-striped"
