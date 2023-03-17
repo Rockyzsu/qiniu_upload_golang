@@ -190,14 +190,7 @@
                                                                                 value="10">
             <button type="button" class="list_bt" onclick="navPage()">查询</button>
         </p>
-        <div class="nextBtn">
-            <button onclick="prePage()">上一页</button>
-            <button onclick="nextPage()">下一页</button>
-            <label>第<input type="text" style="width: 20px" id="page">页/共 <span id="total_page"></span>页 共<span
-                    id="total_count">   </span>条
-                <button onclick="navPage()">跳转</button>
-            </label>
-        </div>
+
         <div class="add"></div>
 
         <table id='EmployList'>
@@ -206,7 +199,14 @@
 
     </div>
 
-
+    <div class="nextBtn">
+        <button onclick="prePage()">上一页</button>
+        <button onclick="nextPage()">下一页</button>
+        <label>第<input type="text" style="width: 20px" id="page">页/共 <span id="total_page"></span>页 共<span
+                id="total_count">   </span>条
+            <button onclick="navPage()">跳转</button>
+        </label>
+    </div>
 </div>
 <script type="text/javascript">
     var submitBTN = document.getElementById("back_bt");
