@@ -10,6 +10,11 @@ func Router() *gin.Engine {
 	// 配置加载模板路径
 
 	router.LoadHTMLGlob("templates/*")
+	//router.LoadHTMLGlob("templates/css/*")
+	//router.LoadHTMLGlob("templates/js/*")
+	//router.LoadHTMLGlob("templates/img/*")
+	//router.LoadHTMLGlob("templates/font-aweome-4.6.3/*")
+
 	router.Static("/static", "static")
 
 	//  第一个参数是url的路径,第二个是本地的路径
@@ -28,8 +33,12 @@ func Router() *gin.Engine {
 	router.GET("/l", controllers.ListImageHistory)  //快捷方式
 	router.POST("/l", controllers.ListImageHistory) //快捷方式
 
-	router.GET("/l2", controllers.ListImageHistoryV2)        //快捷方式
-	router.POST("/l2", controllers.ListImageHistoryV2)       //快捷方式
+	router.GET("/l2", controllers.ListImageHistoryV2)  //快捷方式
+	router.POST("/l2", controllers.ListImageHistoryV2) //快捷方式
+
+	router.GET("/qs", controllers.ListImageHistoryQS)  //券商
+	router.POST("/qs", controllers.ListImageHistoryQS) //券商
+
 	router.GET("/jump", controllers.ListImageHistoryPageV2)  //快捷方式
 	router.POST("/jump", controllers.ListImageHistoryPageV2) //快捷方式
 

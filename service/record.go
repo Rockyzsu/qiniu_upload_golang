@@ -31,6 +31,7 @@ func InsertImageRecord(url string) bool {
 }
 
 type HIST []model.History
+type HIST_QS []model.QSHistory
 
 func GetImageRecord(count int) HIST {
 
@@ -53,6 +54,28 @@ func GetImageRecord(count int) HIST {
 
 	}
 	return hist
+}
+func GetImageQSRecord() HIST_QS {
+	//券商记录
+	rows, err := DB.Query(fmt.Sprintf("select id,url,qs_name from tb_image_qs order by id desc"))
+	if err != nil {
+		log.Println("查询url失败")
+		log.Fatal(err)
+	}
+
+	var hist_qs HIST_QS
+
+	for rows.Next() {
+
+		var h_qs model.QSHistory
+		err = rows.Scan(&h_qs.Id, &h_qs.Url, &h_qs.Qs_name)
+		if err != nil {
+			log.Println("读取url数据出错")
+		}
+		hist_qs = append(hist_qs, h_qs)
+
+	}
+	return hist_qs
 }
 
 func TotalCount() int {

@@ -136,6 +136,15 @@ func ListImageHistoryV2(ctx *gin.Context) {
 
 	}
 }
+func ListImageHistoryQS(ctx *gin.Context) {
+	if ctx.Request.Method == "GET" {
+
+		hist := service.GetImageQSRecord()
+
+		ctx.HTML(http.StatusOK, "gallery.html", hist)
+
+	}
+}
 
 func ListHistorys(ctx *gin.Context) {
 	hist := service.GetImageRecord(50)
