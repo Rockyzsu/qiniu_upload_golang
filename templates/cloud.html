@@ -192,8 +192,7 @@
 
         <div class='wrapper'>
             <textarea rows="1" cols="30" id="mytext"></textarea>
-            <h2 id="tips">提交的URL</h2>
-
+            <h2 id="tips">提交的URL到百度</h2>
 
             <p class="imgType"></p>
             <br>
@@ -356,7 +355,7 @@
     var submitBTN = document.getElementById("bt_bd_submit");
     submitBTN.onclick = function (event) {
         var url = $("#mytext").val();
-        console.log(content)
+        console.log(url)
 
         $.ajax({
             url: "/update-bd-resource",
@@ -366,10 +365,10 @@
             success: function (data) {
                 if (data.code !== 0) {
                     console.log("error")
-                    alert("提交成功")
+                    alert("提交失败")
                 } else {
-                    console.log(data.result)
-                    $("#tips").text("已经写入缓存");
+                    console.log(data.res)
+                    $("#tips").text("剩余"+String(data.count));
                     $("#mytext").val('')
                 }
             },
