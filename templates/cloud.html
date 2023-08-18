@@ -166,23 +166,46 @@
 
 
         <div class="wrapper">
-            <button id="url_update">更新URL资源 site 1 </button>
+            <button id="url_update">更新URL资源 30day </button>
             <input id="txt_content" type="text" value="" class="url_input">
         </div>
 
         <div class="wrapper">
-            <button id="url_update_www">更新URL资源 site 1 （www） </button>
+            <button id="url_update_www">更新URL资源 30day （www） </button>
             <input id="txt_content_www" type="text" value="" class="url_input">
         </div>
 
         <div class="wrapper">
-            <button id="url_update2">更新URL资源 site 2 </button>
+            <button id="url_update2">更新URL资源 kh </button>
             <input id="txt_content2" type="text" value="" class="url_input">
         </div>
+
         <div class="wrapper">
-            <button id="cdn_update">腾讯CDN更新</button>
+            <button id="cdn_update">腾讯CDN更新 kh</button>
             <input id="cdn_content" type="text" value="" class="url_input">
         </div>
+
+<!--        <div class="wrapper">-->
+<!--            <button id="bd_qmt_submit">qmt百度提交</button>-->
+<!--            <input id="bd_qmt_link" type="text" value="" class="url_input">-->
+<!--        </div>-->
+
+        <div class='wrapper'>
+            <textarea rows="1" cols="30" id="mytext"></textarea>
+            <h2 id="tips">提交的URL</h2>
+
+
+            <p class="imgType"></p>
+            <br>
+
+            <div class="wrapper">
+                <button id="bt_bd_submit">提交</button>
+            </div>
+
+
+        </div>
+
+
 
     </div>
 
@@ -322,6 +345,37 @@
             },
             fail: function (data) {
                 alert("更新失败!");
+            }
+        })
+
+    }
+</script>
+
+<script type="text/javascript">
+    // 百度手动提交
+    var submitBTN = document.getElementById("bt_bd_submit");
+    submitBTN.onclick = function (event) {
+        var url = $("#mytext").val();
+        console.log(content)
+
+        $.ajax({
+            url: "/update-bd-resource",
+            type: "POST",
+            data: {"url": url},
+            contentType: "application/x-www-form-urlencoded",
+            success: function (data) {
+                if (data.code !== 0) {
+                    console.log("error")
+                    alert("提交成功")
+                } else {
+                    console.log(data.result)
+                    $("#tips").text("已经写入缓存");
+                    $("#mytext").val('')
+                }
+            },
+            fail: function (data) {
+                alert("提交失败");
+                console.log("提交失败");
             }
         })
 

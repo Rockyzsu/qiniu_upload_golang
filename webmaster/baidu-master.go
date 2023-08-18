@@ -39,6 +39,31 @@ func GetPushUrlsBD(page int) []string {
 	return ParseBD(content)
 }
 
+func PushBaiduQMT(url string) (bool, int) {
+	client := resty.New()
+	var last_remain int
+	var BD_URL string
+	targetUrl := "https://qmt-ptrade.com"
+	BD_URL = fmt.Sprintf(HOST_CONFIG.Push_baidu_host_url, targetUrl)
+	var res *Response
+
+	_, err := client.R().
+		SetHeader("Content-Type", "text/plain").
+		SetHeader("Host", "data.zz.baidu.com").
+		SetHeader("User-Agent", "curl/7.12.1").
+		SetBody(url).
+		SetResult(&res).
+		Post(BD_URL)
+
+	if err != nil {
+		fmt.Println(err)
+		return false, 0
+	}
+	last_remain = res.Remain
+
+	return true, last_remain
+}
+
 func PushBaidu(urlList []string, status int) (bool, int) {
 	client := resty.New()
 	var last_remain int

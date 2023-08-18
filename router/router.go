@@ -68,6 +68,7 @@ func Router() *gin.Engine {
 	router.POST("/update-site1", controllers.BaiduSite1)
 	router.POST("/update-site2", controllers.BaiduSite2)
 	router.POST("/update-cdn", controllers.TencentUpdateCDN)
+	router.POST("/update-bd-resource", controllers.BaiduSiteResource)
 
 	// 测试用
 	router.GET("/node", controllers.DynamicAddNode)

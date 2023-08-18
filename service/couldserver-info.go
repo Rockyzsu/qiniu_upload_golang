@@ -7,10 +7,11 @@ import (
 )
 
 type CloudHost struct {
-	Host              string `json:"host"`
-	BAIDU_URL         string `json:"BAIDU_URL"`
-	Wp_host           string `json:"wp_Host"`
-	Wp_Baidu_host_url string `json:"wp_Baidu_host_url"`
+	Host                string `json:"host"`
+	BAIDU_URL           string `json:"BAIDU_URL"`
+	Wp_host             string `json:"wp_Host"`
+	Wp_Baidu_host_url   string `json:"wp_Baidu_host_url"`
+	Push_baidu_host_url string `json:"push_baidu_host_url"`
 }
 
 func JsonParseHost(filename string) (CloudHost, error) {

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"qiniu/webmaster"
 	"strconv"
+	"strings"
 )
 
 // 百度站长
@@ -36,6 +37,18 @@ func BaiduSite1(ctx *gin.Context) {
 func BaiduSite2(ctx *gin.Context) {
 
 	res, count := webmaster.PushWP(1)
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":  0,
+		"res":   res,
+		"count": count,
+	})
+}
+
+func BaiduSiteResource(ctx *gin.Context) {
+
+	url := ctx.PostForm("url")
+	url = strings.Trim(url, "")
+	res, count := webmaster.PushBaiduQMT(url)
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":  0,
 		"res":   res,
