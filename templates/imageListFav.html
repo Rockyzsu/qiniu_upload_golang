@@ -42,7 +42,7 @@
             var count = $("#count").val();
 
             $.ajax({
-                url: "/list",
+                url: "/fav",
                 type: "POST",
                 data: {"password": pwd,"count":count},
                 contentType: "application/x-www-form-urlencoded",
@@ -63,7 +63,8 @@
                     //首行添加内容
                     tableHead.insertCell(0).innerHTML = "序号";
                     tableHead.insertCell(1).innerHTML = "内容";
-                    tableHead.insertCell(2).innerHTML = "时间";
+                    tableHead.insertCell(2).innerHTML = "备注";
+                    tableHead.insertCell(3).innerHTML = "时间";
 
 
                     //表加进div容器
@@ -77,7 +78,8 @@
                         tr.insertCell(0).innerHTML = ret_data[i].id;
                         u=ret_data[i].url;
                         tr.insertCell(1).innerHTML = "<td><a href=\""+u+"\" target=\"_blank\">"+u+"</td>";
-                        tr.insertCell(2).innerHTML = ret_data[i].updated;
+                        tr.insertCell(2).innerHTML = ret_data[i].note;
+                        tr.insertCell(3).innerHTML = ret_data[i].updated;
 
                     }
 

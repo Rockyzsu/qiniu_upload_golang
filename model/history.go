@@ -5,6 +5,7 @@ type History struct {
 	Url       string `json:"url"`
 	Updated   string `json:"updated"`
 	IsDeleted bool   `json:"isDeleted"`
+	Note      string `json:"note"`
 }
 
 type QSHistory struct {

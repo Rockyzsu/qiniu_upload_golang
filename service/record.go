@@ -55,9 +55,10 @@ func GetImageRecord(count int) HIST {
 	}
 	return hist
 }
-func GetImageRecordFav(count int) HIST {
 
-	rows, err := DB.Query(fmt.Sprintf("select id,url,updated from tb_image_upload where isDeleted=0 and is_fav = 1 order by id desc limit %d", count))
+func GetImageRecordFav(count int) HIST {
+	log.Println("is_fav = 1")
+	rows, err := DB.Query(fmt.Sprintf("select id,url,note,updated from tb_image_upload where isDeleted = 0 and is_fav = 1 order by id desc limit %d", count))
 	if err != nil {
 		log.Println("查询url失败")
 		log.Fatal(err)
@@ -68,7 +69,7 @@ func GetImageRecordFav(count int) HIST {
 	for rows.Next() {
 
 		var h model.History
-		err = rows.Scan(&h.Id, &h.Url, &h.Updated)
+		err = rows.Scan(&h.Id, &h.Url, &h.Note, &h.Updated)
 		if err != nil {
 			log.Println("读取url数据出错")
 		}
