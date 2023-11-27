@@ -33,6 +33,9 @@ func Router() *gin.Engine {
 	router.GET("/l", controllers.ListImageHistory)  //快捷方式
 	router.POST("/l", controllers.ListImageHistory) //快捷方式
 
+	router.GET("/fav", controllers.ListFavHistory)  //快捷方式
+	router.POST("/fav", controllers.ListFavHistory) //快捷方式
+
 	router.GET("/l2", controllers.ListImageHistoryV2)  //快捷方式
 	router.POST("/l2", controllers.ListImageHistoryV2) //快捷方式
 

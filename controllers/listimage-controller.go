@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-//上传记录
+// 上传记录
 func ListImageHistory(ctx *gin.Context) {
 	if ctx.Request.Method == "GET" {
 		ctx.HTML(http.StatusOK, "imageList.html", nil)
@@ -25,6 +25,39 @@ func ListImageHistory(ctx *gin.Context) {
 				return
 			}
 			hist := service.GetImageRecord(count_int)
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"ret_data": hist,
+				"status":   1,
+			})
+
+		} else {
+			fmt.Println("error")
+			ctx.JSON(http.StatusOK, gin.H{
+				"ret_data": nil,
+				"status":   0,
+			})
+		}
+
+	}
+}
+
+func ListFavHistory(ctx *gin.Context) {
+	if ctx.Request.Method == "GET" {
+		ctx.HTML(http.StatusOK, "imageListFav.html", nil)
+	} else {
+		pwd := ctx.PostForm("password")
+		count := ctx.PostForm("count")
+		if pwd == service.AuthPassword {
+			count_int, err := strconv.Atoi(count)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"ret_data": nil,
+					"status":   0,
+				})
+				return
+			}
+			hist := service.GetImageRecordFav(count_int)
 
 			ctx.JSON(http.StatusOK, gin.H{
 				"ret_data": hist,
