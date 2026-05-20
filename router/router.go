@@ -56,13 +56,16 @@ func Router() *gin.Engine {
 	router.POST("/p", controllers.GetHistoryText)
 
 	//删除 需要权限
-	router.GET("/d", controllers.DeleteImage) // 删除
+	router.GET("/d", controllers.DeleteImage)
+	router.POST("/d", controllers.DeleteImage)
 	router.POST("/delimage", controllers.DeleteImage)
 	router.POST("/image/remove_id", controllers.DeleteImageById)
 
 	// 获取所有图片
 	router.GET("/w", controllers.WalkImages)
+	router.POST("/w", controllers.WalkImages)
 	router.GET("/walk", controllers.WalkImages)
+	router.POST("/walk", controllers.WalkImages)
 	router.POST("/image/next", controllers.WalkImages)
 
 	//router.GET("/cloud", controllers.TencentUpdateCDN)

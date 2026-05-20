@@ -9,11 +9,19 @@ import (
 
 func DeleteImage(ctx *gin.Context) {
 	if ctx.Request.Method == "GET" {
-		ctx.HTML(http.StatusOK, "delete.html", nil)
+		ctx.HTML(http.StatusOK, "imageList.html", nil)
 		return
 	}
 
 	if ctx.Request.Method == "POST" {
+		pwd := ctx.PostForm("password")
+		if pwd != service.AuthPassword {
+			ctx.JSON(http.StatusOK, gin.H{
+				"ret_data": nil,
+				"status":   0,
+			})
+			return
+		}
 
 		url := ctx.PostForm("url")
 		ret := service.DeleteImage(url)
