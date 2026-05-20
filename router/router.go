@@ -45,7 +45,7 @@ func Router() *gin.Engine {
 	router.GET("/jump", controllers.ListImageHistoryPageV2)  //快捷方式
 	router.POST("/jump", controllers.ListImageHistoryPageV2) //快捷方式
 
-	router.GET("/ll", controllers.ListHistorys) //快捷方式
+	//router.GET("/ll", controllers.ListHistorys) //快捷方式
 	// 文本
 	router.GET("/copy", controllers.CopyTextIndex)
 	router.GET("/c", controllers.CopyTextIndex)
