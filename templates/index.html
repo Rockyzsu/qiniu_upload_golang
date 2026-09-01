@@ -147,23 +147,28 @@
         }
 
         .upload-btn {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
+            position: relative;
+            width: 180px;
+            height: 180px;
+            border-radius: 20px;
             background: linear-gradient(135deg, #1BA1E2, #007bff);
             color: #FFF;
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 90px;
+            font-weight: 300;
+            line-height: 1;
             border: none;
             cursor: pointer;
             box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
             transition: transform .2s ease, box-shadow .2s ease;
             outline: none;
             margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .upload-btn:hover {
-            transform: scale(1.08);
+            transform: scale(1.05);
             box-shadow: 0 12px 26px rgba(0, 123, 255, 0.55);
         }
 
@@ -202,7 +207,7 @@
 
 
         <div class="wrapper">
-            <button id="bt_upload" class="upload-btn" title="点击上传">上传</button>
+            <button id="bt_upload" class="upload-btn" title="点击上传">+</button>
             <p>生成的链接</p>
             <!--            <label for="txt_content"></label>-->
             <input id="txt_content" type="text" value="" class="url_input">
