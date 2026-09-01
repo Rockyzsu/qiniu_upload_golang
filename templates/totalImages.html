@@ -4,89 +4,92 @@
     <title>所有图片</title>
     <script src="//libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">
-        $("document").ready(function () {
-            var max_value = {{ .length }}
-            var i = 1
-            $("#back").click(function () {
-                if (i == 1) {
-                    i = max_value;
-                    $(".show").text(i);
-                } else {
-                    i = i - 1;
-                    $(".show").text(i);
+        var currentPage = 1;
+        var maxPages = 1;
 
+        function loadImages() {
+            var pwd = $("#pwd").val();
+            $.ajax({
+                url: "/w",
+                method: 'POST',
+                data: {password: pwd, page: currentPage},
+                success: function (result) {
+                    if (result.status === 0 || !result.TotalImage) {
+                        alert("密码错误");
+                        return;
+                    }
+                    displayImages(result.TotalImage);
+                    maxPages = Math.ceil(result.length / 20);
+                    $(".show").text(currentPage);
+                    $("#gallery_content").show();
+                    $("#password_section").hide();
+                },
+                fail: function () {
+                    alert("请求失败");
                 }
-                NextPage(i)
+            });
+        }
 
+        function displayImages(imageList) {
+            $("#id_body").empty();
+            for (var i = 0; i < imageList.length; i++) {
+                img = imageList[i];
+                var image_div = `<div class="div_photo">
+                   <img height=250 width=250 src="${img}"/>
+                   <div class="div_phototime"><a href="${img}">${img}</a></div>
+                   <button class="removeBT" id="${img}" onclick="removeImage(this)">删除</button>
+                </div>`;
+                $("#id_body").append(image_div);
+            }
+        }
+
+        function NextPage(page) {
+            var pwd = $("#pwd").val();
+            $.ajax({
+                url: "/w",
+                method: 'POST',
+                data: {password: pwd, page: page},
+                success: function (result) {
+                    if (result.TotalImage) {
+                        displayImages(result.TotalImage);
+                        currentPage = page;
+                        $(".show").text(currentPage);
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $("#gallery_content").hide();
+            $("#back").click(function () {
+                if (currentPage <= 1) {
+                    currentPage = maxPages;
+                } else {
+                    currentPage--;
+                }
+                NextPage(currentPage);
             });
 
             $("#next").click(function () {
-                    if (i == max_value) {
-                        i = 1;
-                        $(".show").text(i);
-                    } else {
-                        i = 1 + i;
-                        $(".show").text(i);
-                    }
-                    NextPage(i)
+                if (currentPage >= maxPages) {
+                    currentPage = 1;
+                } else {
+                    currentPage++;
                 }
-            )
+                NextPage(currentPage);
+            });
         });
 
-        function NextPage(page) {
-            console.log('next page')
-            console.log(page)
-            $.ajax({
-                url: "/image/next",
-                method: 'POST',
-                data: {page: page},
-                success: function (result) {
-
-                    $("#id_body").empty();
-                    for (var i = 0; i < result.TotalImage.length; i++) {
-
-                        img = result.TotalImage[i]
-
-                        image_div = `<div class="div_photo">
-                   <img height=250 width=250 src="${img}"/>
-                  <div id="" class="div_phototime"><a href="${img}">${img}</a>
-                    </div>
-                    <button class="removeBT" id="${img}" onclick="removeImage(this)">删除</button>
-
-                </div>`
-                        $("#id_body").append(image_div);
-                    }
-                },
-                fail: function (result) {
-                    console.log("failed")
-                    console.log(result);
-                    // location.reload();
-                    // if (result.data === 1) {
-                    //     location.reload();
-                    // }
-                }
-            });
-
-        }
-
         function removeImage(element) {
-            console.log("remove image")
-            console.log(element.id)
             $.ajax({
                 url: "/image/remove",
                 method: 'POST',
                 data: {identifier: element.id},
-                success: function (result) {
+                success: function () {
                     location.reload();
-                },
-                fail: function (result) {
-                    location.reload();
-
                 }
             });
         }
-
-
     </script>
 
     <style>
@@ -95,21 +98,18 @@
             height: 56px;
             background-color: #777;
         }
-
         .div_title {
             width: 100%;
             height: 100px;
             background-color: #555;
             margin-top: 10px;
         }
-
         .div_body {
             width: 100%;
             height: 1000px;
             background-color: #bbb;
             margin-top: 10px;
         }
-
         .div_menu {
             width: 5%;
             height: 56px;
@@ -118,26 +118,9 @@
             color: #fff;
             text-align: center;
             line-height: 56px;
-
         }
-
-        .color-menu1 {
-            background-color: #999;
-        }
-
-        .color-menu2 {
-            background-color: #666;
-        }
-
-        .color-menu3 {
-            background-color: #999;
-        }
-
-        .color-menu4 {
-            background-color: #666;
-        }
-
-
+        .color-menu1 { background-color: #999; }
+        .color-menu2 { background-color: #666; }
         .div_titledata {
             height: 24px;
             width: 166px;
@@ -146,7 +129,6 @@
             margin-left: 2%;
             color: #f0ffff;
         }
-
         .div_titledata2 {
             height: 24px;
             width: 600px;
@@ -155,7 +137,6 @@
             margin-left: 2%;
             color: #f0ffff;
         }
-
         .div_photo {
             height: 300px;
             width: 20%;
@@ -163,7 +144,6 @@
             margin-left: 30px;
             margin-top: 10px;
         }
-
         .div_phototime {
             height: 25px;
             width: 250px;
@@ -171,7 +151,6 @@
             line-height: 25px;
             background-color: #A9A9A9;
         }
-
         .div_end {
             text-align: center;
             width: 100%;
@@ -179,24 +158,18 @@
             float: left;
             background-color: #555;
         }
-
         .anniu {
             width: 100px;
             height: 50px;
             background: red;
-
-
         }
-
         .show {
             width: 100px;
             height: 50px;
             background: rgb(143, 231, 163);
             text-align: center;
             line-height: 50px;
-
         }
-
         .anniu, .show {
             float: left;
         }
@@ -205,51 +178,30 @@
 
 <body style="background-color:#969696">
 
-<div class="div_top">
-    <div class="div_menu color-menu1" style="margin-left:5%">相册</div>
-    <div class="div_menu color-menu2">照片</div>
-    <div class="div_menu color-menu2" style=" float:right">反馈</div>
+<div align="center" style="padding-top:200px;" id="password_section">
+    <p>输入密码：<input type="password" id="pwd"> <button onclick="loadImages()">查询</button></p>
 </div>
 
-<div class="div_title">
-    <div class="div_titledata"><b>说说和日志相册</b></div>
-    <div class="div_titledata2"><b>上传照片/视频 批量管理</b></div>
-</div>
+<div id="gallery_content">
+    <div class="div_top">
+        <div class="div_menu color-menu1" style="margin-left:5%">相册</div>
+        <div class="div_menu color-menu2">照片</div>
+        <div class="div_menu color-menu2" style="float:right">反馈</div>
+    </div>
 
-<div id="id_body" class="div_body">
-    <script type="text/javascript">
-        allImage = {{ .TotalImage}}
-        node = allImage.length
-        for (var i = 0; i < node; i++) {
+    <div class="div_title">
+        <div class="div_titledata"><b>说说和日志相册</b></div>
+        <div class="div_titledata2"><b>上传照片/视频 批量管理</b></div>
+    </div>
 
-            console.log(allImage[i])
-            img = allImage[i]
+    <div id="id_body" class="div_body"></div>
 
-            image_div = `<div class="div_photo">
-                   <img height=250 width=250 src="${img}"/>
-                  <div id="" class="div_phototime"><a href="${img}">${img}</a>
-                    </div>
-                    <button class="removeBT" id="${img}" onclick="removeImage(this)">删除</button>
-
-                </div>`
-            $("#id_body").append(image_div);
-        }
-    </script>
-
-
-</div>
-
-
-<div class="div_end">
-
-
-    <div>
-        <div class="anniu" id="back"><img src="static/left.jpeg" width=100px height=50px></div>
-
-        <div class="show">1</div>
-
-        <div class="anniu" id="next"><img src="static/right.jpeg" width=100px height=50px></div>
-<!--        <div class="show">{{ .length }}</div>-->
+    <div class="div_end">
+        <div>
+            <div class="anniu" id="back"><img src="static/left.jpeg" width=100px height=50px></div>
+            <div class="show">1</div>
+            <div class="anniu" id="next"><img src="static/right.jpeg" width=100px height=50px></div>
+        </div>
     </div>
 </div>
 

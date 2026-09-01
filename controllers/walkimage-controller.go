@@ -11,7 +11,7 @@ const PAGENUM = 20
 
 func WalkImages(ctx *gin.Context) {
 	if ctx.Request.Method == "GET" {
-		ctx.HTML(http.StatusOK, "imageList.html", nil)
+		ctx.HTML(http.StatusOK, "totalImages.html", nil)
 	} else {
 		pwd := ctx.PostForm("password")
 		if pwd == service.AuthPassword {

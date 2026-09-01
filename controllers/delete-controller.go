@@ -9,7 +9,7 @@ import (
 
 func DeleteImage(ctx *gin.Context) {
 	if ctx.Request.Method == "GET" {
-		ctx.HTML(http.StatusOK, "imageList.html", nil)
+		ctx.HTML(http.StatusOK, "delete.html", nil)
 		return
 	}
 
@@ -24,13 +24,18 @@ func DeleteImage(ctx *gin.Context) {
 		}
 
 		url := ctx.PostForm("url")
+		if url == "" {
+			ctx.JSON(http.StatusOK, gin.H{"ret_data": 1, "status": 1})
+			return
+		}
+
 		ret := service.DeleteImage(url)
 		var status int
 		if ret {
 			status = 1
 		}
 		service.DeleteImageRecord(url)
-		ctx.JSON(http.StatusOK, gin.H{"data": status, "status": "great"})
+		ctx.JSON(http.StatusOK, gin.H{"data": status, "status": 1})
 		return
 	}
 }
