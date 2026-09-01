@@ -180,6 +180,16 @@
             pointer-events: none;
         }
 
+        .file-wrapper.upload-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .file-wrapper.upload-disabled .file-btn {
+            box-shadow: none;
+        }
+
         .file-wrapper {
             display: inline-block;
             cursor: pointer;
@@ -247,7 +257,7 @@
         <br>
         <br>
         <form id="uploadForm">
-            <label class="file-wrapper" for="bt_file">
+            <label class="file-wrapper" id="file-wrapper" for="bt_file">
                 <span class="file-btn">+</span>
                 <input type="file" id="bt_file" name="file">
             </label>
@@ -314,25 +324,30 @@
     var submitBTN = document.getElementById("bt_upload");
     var uploadFormEl = document.getElementById("uploadForm");
     var fileInput = document.getElementById("bt_file");
+    var fileWrap = document.getElementById("file-wrapper");
 
     function setUploadLocked(locked) {
         submitBTN.disabled = locked;
         if (locked) {
             uploadFormEl.setAttribute("data-locked", "1");
             submitBTN.classList.add("upload-disabled");
+            fileWrap.classList.add("upload-disabled");
         } else {
             uploadFormEl.removeAttribute("data-locked");
             submitBTN.classList.remove("upload-disabled");
+            fileWrap.classList.remove("upload-disabled");
         }
     }
 
-    // 上传进行中禁止再次选择文件
-    fileInput.addEventListener("click", function (e) {
+    // 上传进行中禁止再次选择文件（拦截 label 与 input 的点击）
+    function blockWhileUploading(e) {
         if (uploadFormEl.hasAttribute("data-locked")) {
             e.preventDefault();
             e.stopPropagation();
         }
-    });
+    }
+    fileWrap.addEventListener("click", blockWhileUploading, true);
+    fileInput.addEventListener("click", blockWhileUploading, true);
 
     submitBTN.onclick = function (event) {
         if (submitBTN.disabled) {
