@@ -7,6 +7,8 @@ import (
 
 func Router() *gin.Engine {
 	router := gin.Default()
+	// 大文件上传：超过该内存大小(64MB)则写入磁盘临时文件，防止内存耗尽
+	router.MaxMultipartMemory = 64 << 20
 	// 配置加载模板路径
 
 	router.LoadHTMLGlob("templates/*")

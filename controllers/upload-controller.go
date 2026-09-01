@@ -58,7 +58,13 @@ func UploadPage(ctx *gin.Context) {
 		}
 		urlpath, err := service.UploadImg(filePath, service.SOURCE)
 		if err != nil {
-			log.Fatal("Error")
+			log.Println("七牛上传失败:", err)
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":    3,
+				"message": "上传失败: " + err.Error(),
+				"data":    "",
+			})
+			return
 		}
 		//fmt.Println("上传成功")
 		status := service.InsertImageRecord(urlpath)

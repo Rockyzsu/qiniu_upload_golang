@@ -174,6 +174,12 @@
             transform: scale(0.96);
         }
 
+        .upload-btn.upload-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         .file-wrapper {
             display: inline-block;
             cursor: pointer;
@@ -306,7 +312,33 @@
 
 <script type="text/javascript">
     var submitBTN = document.getElementById("bt_upload");
+    var uploadFormEl = document.getElementById("uploadForm");
+    var fileInput = document.getElementById("bt_file");
+
+    function setUploadLocked(locked) {
+        submitBTN.disabled = locked;
+        if (locked) {
+            uploadFormEl.setAttribute("data-locked", "1");
+            submitBTN.classList.add("upload-disabled");
+        } else {
+            uploadFormEl.removeAttribute("data-locked");
+            submitBTN.classList.remove("upload-disabled");
+        }
+    }
+
+    // 上传进行中禁止再次选择文件
+    fileInput.addEventListener("click", function (e) {
+        if (uploadFormEl.hasAttribute("data-locked")) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+
     submitBTN.onclick = function (event) {
+        if (submitBTN.disabled) {
+            return;
+        }
+        setUploadLocked(true);
         // 注意这里是 onclick 函数
         console.log("click");
         var formData = new FormData($("#uploadForm")[0]);
@@ -338,10 +370,12 @@
                         alert("已复制好，可贴粘。");
                     }
                 }
+                setUploadLocked(false);
             },
             fail: function (data) {
                 alert("上传失败");
                 console.log("上传失败");
+                setUploadLocked(false);
             }
         })
 

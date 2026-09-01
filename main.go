@@ -13,11 +13,21 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"net/http"
 	"qiniu/router"
 	"qiniu/service"
+	"time"
 )
 
 func main() {
 	routerObj := router.Router()
-	log.Fatalln(routerObj.Run(fmt.Sprintf("0.0.0.0:%d", service.Port)))
+	srv := &http.Server{
+		Addr:              fmt.Sprintf("0.0.0.0:%d", service.Port),
+		Handler:           routerObj,
+		ReadHeaderTimeout: 10 * time.Second,
+		ReadTimeout:       10 * time.Minute,
+		WriteTimeout:      10 * time.Minute,
+		IdleTimeout:       120 * time.Second,
+	}
+	log.Fatalln(srv.ListenAndServe())
 }
